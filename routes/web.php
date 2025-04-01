@@ -2,6 +2,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProduitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;  // <-- Make sure this line is added
 
@@ -22,8 +23,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    // You can redirect based on the user's role here
-    return redirect('/redirect');  // Redirecting to the /redirect route to decide admin or customer
+    
+    return redirect('/redirect');  
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/redirect', function () {
@@ -34,16 +35,12 @@ Route::get('/redirect', function () {
     }
 })->middleware('auth');
 
-// Admin routes (only accessible by admins)
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-    // Add other admin routes here
 });
 
-// Customer routes (only accessible by customers)
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.dashboard');
-    // Add other customer routes here
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,3 +50,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
+Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');  // Get request to show the form
+Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');  // Post request to store data
+Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('produits.show');
+Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
+Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
