@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'file'
     ];
 
     /**
@@ -61,5 +62,10 @@ class User extends Authenticatable
     public function isCustomer()
     {
         return $this->role === 'customer';
+    }
+    
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
     }
 }
