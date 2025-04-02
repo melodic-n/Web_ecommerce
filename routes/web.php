@@ -6,6 +6,8 @@ use App\Http\Controllers\ProduitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; 
 use App\Http\Controllers\PanierController;
+use App\Http\Controllers\CommandeController;
+
 
 
 /*
@@ -64,3 +66,8 @@ Route::get('/panier/{id}', [PanierController::class, 'show']); // id of user
 Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']); // d of panier
 Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']); // id of panier
 Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']); // id of panier
+
+
+
+Route::post('/commandes/create/{panierId}', [CommandeController::class, 'createOrder']);
+Route::get('/commande/{id}', [CommandeController::class, 'index']); // Corrigez le nom du contrôleur ici

@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->role === 'customer';
     }
     
+    public function commande()
+    {
+        return $this->hasOne(Commande::class, 'user_id'); // Assurez-vous que 'user_id' est la clé étrangère dans la table commandes
+    }
+    
     public function customer()
     {
         return $this->hasOne(Customer::class);

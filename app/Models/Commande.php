@@ -22,4 +22,8 @@ class Commande extends Model
     {
         return $this->belongsTo(Panier::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
