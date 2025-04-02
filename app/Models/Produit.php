@@ -11,4 +11,10 @@ class Produit extends Model
     protected $table = 'produits';  
 
     protected $fillable = ['nom_prod', 'img_prod', 'description','category' ,'quatite','prix'];
+    
+    public function paniers()
+    {
+        return $this->belongsToMany(Panier::class, 'panier_produit')->withPivot('quantite');
+    }
+    
 }

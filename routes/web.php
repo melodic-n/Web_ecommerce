@@ -4,7 +4,8 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;  // <-- Make sure this line is added
+use Illuminate\Support\Facades\Auth; 
+use App\Http\Controllers\PanierController;
 
 
 /*
@@ -57,3 +58,9 @@ Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('pro
 Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
 Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
 Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
+
+Route::post('/panier', [PanierController::class, 'store']); // For creating a new Panier
+Route::get('/panier/{id}', [PanierController::class, 'show']); // id of user
+Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']); // d of panier
+Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']); // id of panier
+Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']); // id of panier
