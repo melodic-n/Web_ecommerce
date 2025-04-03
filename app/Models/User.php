@@ -1,22 +1,17 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Admin;
+use App\Models\Customer;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -25,52 +20,54 @@ class User extends Authenticatable
         'file'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-     /**
-     * Check if the user is an admin.
-     *
-     * @return bool
-     */
+
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
 
-    /**
-     * Check if the user is a customer.
-     *
-     * @return bool
-     */
     public function isCustomer()
     {
         return $this->role === 'customer';
     }
-    
+
     public function commande()
     {
-        return $this->hasOne(Commande::class, 'user_id'); // Assurez-vous que 'user_id' est la clé étrangère dans la table commandes
+        return $this->hasOne(Commande::class, 'user_id');
     }
-    
+
     public function customer()
     {
         return $this->hasOne(Customer::class);
     }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            \Log::info('User created: ', ['user' => $user]);
+
+            if ($user->role === 'admin') {
+                Admin::create([
+                    'user_id' => $user->id,
+                ]);
+            }
+        });
+    }
+    
 }

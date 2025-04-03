@@ -71,3 +71,27 @@ Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modif
 
 Route::post('/commandes/create/{panierId}', [CommandeController::class, 'createOrder']);
 Route::get('/commande/{id}', [CommandeController::class, 'index']); // Corrigez le nom du contrôleur ici
+
+
+// Route::get('/test-insert', function () {
+//     try {
+//         $user = \App\Models\User::create([
+//             'name' => 'Test User',
+//             'email' => 'testuser@example.com',
+//             'password' => \Hash::make('password'),
+//             'role' => 'customer',
+//         ]);
+
+//         \App\Models\Customer::create([
+//             'user_id' => $user->id,
+//             'nom' => 'Test Nom',
+//             'prenom' => 'Test Prenom',
+//             'tel' => '1234567890',
+//             'adresse' => 'Test Address',
+//         ]);
+
+//         return 'Test insert successful!';
+//     } catch (\Exception $e) {
+//         return 'Test insert failed: ' . $e->getMessage();
+//     }
+// });
