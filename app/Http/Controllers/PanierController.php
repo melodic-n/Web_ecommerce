@@ -5,63 +5,105 @@ namespace App\Http\Controllers;
 use App\Models\Panier;
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PanierController extends Controller
 {
-    public function show($id)
+    public function __construct()
     {
-        $panier = Panier::with('produits')->where('user_id', $id)->first();
+        $this->middleware('auth'); // Ensure authentication is required
+    }
+
+    public function show()
+    {
+        $user = Auth::user();
+        $panier = Panier::with('produits')->where('user_id', $user->id)->first();
+
+        if (!$panier) {
+            return response()->json(['message' => 'Aucun panier trouvé'], 404);
+        }
+
         return response()->json($panier);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'produits' => 'required|array', 
-            'produits.*.id' => 'required|exists:produits,id', 
-            'produits.*.quantite' => 'required|integer|min:1', 
-        ]);
-    
-        $totalPrice = 0;
-        foreach ($request->produits as $produit) {
-            $produitData = Produit::findOrFail($produit['id']);
-            $totalPrice += $produitData->prix * $produit['quantite'];
+        Log::info('Panier store request received', ['data' => $request->all()]);
+
+        try {
+            $user = Auth::user();
+
+            // ✅ Validate request
+            $validatedData = $request->validate([
+                'produits' => 'required|array',
+                'produits.*.id' => 'required|exists:produits,id',
+                'produits.*.quantite' => 'required|integer|min:1',
+            ]);
+
+            Log::info('Validation passed', ['validatedData' => $validatedData]);
+
+            // ✅ Calculate total price
+            $totalPrice = 0;
+            foreach ($request->produits as $produit) {
+                $produitData = Produit::find($produit['id']);
+                $totalPrice += $produitData->prix * $produit['quantite'];
+            }
+            Log::info("Total price calculated", ['totalPrice' => $totalPrice]);
+
+            // ✅ Check if the user already has a panier
+            $panier = Panier::firstOrCreate(
+                ['user_id' => $user->id],
+                ['prix_total' => $totalPrice]
+            );
+
+            // ✅ Attach products to panier
+            foreach ($request->produits as $produit) {
+                $panier->produits()->syncWithoutDetaching([
+                    $produit['id'] => ['quantite' => $produit['quantite']]
+                ]);
+            }
+
+            $this->updatePrixTotal($panier);
+
+            return response()->json([
+                'message' => 'Panier mis à jour avec succès',
+                'panier' => $panier->load('produits')
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la création du panier : ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Erreur lors de la création du panier.',
+                'details' => $e->getMessage()
+            ], 500);
         }
-    
-        $panier = Panier::create([
-            'user_id' => $request->user_id,
-            'prix_total' => $totalPrice,
-        ]);
-    
-        foreach ($request->produits as $produit) {
-            $panier->produits()->attach($produit['id'], ['quantite' => $produit['quantite']]);
-        }
-    
-        return response()->json(['message' => 'Panier created successfully', 'panier' => $panier->load('produits')], 201);
     }
-    
-    public function ajouterArticle(Request $request, $panierId)
+
+    public function ajouterArticle(Request $request)
     {
-        $panier = Panier::findOrFail($panierId);
-        $produit = Produit::findOrFail($request->id); // Assurez-vous que c'est bien 'id'
-    
+        Log::info('Ajouter article request received', ['data' => $request->all()]);
+
+        $user = Auth::user();
+        $panier = Panier::where('user_id', $user->id)->firstOrFail();
+        $produit = Produit::findOrFail($request->id);
+
         $quantite = $request->quantite ?? 1;
-    
-        // Utiliser syncWithoutDetaching pour mettre à jour ou ajouter la relation
+
         $panier->produits()->syncWithoutDetaching([
             $produit->id => ['quantite' => $quantite]
         ]);
-    
+
         $this->updatePrixTotal($panier);
-    
+
         return response()->json(['message' => 'Produit ajouté/mis à jour', 'panier' => $panier->refresh()]);
     }
 
-
-    public function retirerArticle($panierId, $produitId)
+    public function retirerArticle($produitId)
     {
-        $panier = Panier::findOrFail($panierId);
+        Log::info('Retirer article request received', ['produitId' => $produitId]);
+
+        $user = Auth::user();
+        $panier = Panier::where('user_id', $user->id)->firstOrFail();
         $produit = Produit::findOrFail($produitId);
 
         $panier->produits()->detach($produit->id);
@@ -71,9 +113,12 @@ class PanierController extends Controller
         return response()->json(['message' => 'Produit retiré', 'panier' => $panier->refresh()]);
     }
 
-    public function modifierQteArticle(Request $request, $panierId, $produitId)
+    public function modifierQteArticle(Request $request, $produitId)
     {
-        $panier = Panier::findOrFail($panierId);
+        Log::info('Modifier quantité request received', ['data' => $request->all()]);
+
+        $user = Auth::user();
+        $panier = Panier::where('user_id', $user->id)->firstOrFail();
         $produit = Produit::findOrFail($produitId);
         $nouvelleQuantite = $request->quantite;
 
@@ -91,5 +136,6 @@ class PanierController extends Controller
             $total += $produit->prix * $produit->pivot->quantite;
         }
         $panier->update(['prix_total' => $total]);
+        Log::info("Prix total mis à jour", ['panierId' => $panier->id, 'nouveauPrixTotal' => $total]);
     }
 }

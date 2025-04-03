@@ -9,7 +9,6 @@ use App\Http\Controllers\PanierController;
 use App\Http\Controllers\CommandeController;
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +23,6 @@ use App\Http\Controllers\CommandeController;
 Route::get('/', function () {
     return view('welcome');
 });
-
 Route::get('/dashboard', function () {
     
     return redirect('/redirect');  
@@ -40,10 +38,25 @@ Route::get('/redirect', function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
+    Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');  // Get request to show the form
+    Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');  // Post request to store data
+    Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('produits.show');
+    Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
+    Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+    Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
+
 });
 
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.dashboard');
+    Route::post('/panier', [PanierController::class, 'store']);
+    Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']);
+    Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
+    Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']);
+    Route::get('/commande/{id}', [CommandeController::class, 'index']);
+    Route::post('/commandes/create', [CommandeController::class, 'createOrder']);
+        Route::get('/paniers', [PanierController::class, 'show']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,24 +66,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
-Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');  // Get request to show the form
-Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');  // Post request to store data
-Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('produits.show');
-Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
-Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
-Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
-
-Route::post('/panier', [PanierController::class, 'store']); // For creating a new Panier
-Route::get('/panier/{id}', [PanierController::class, 'show']); // id of user
-Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']); // d of panier
-Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']); // id of panier
-Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']); // id of panier
 
 
-
-Route::post('/commandes/create/{panierId}', [CommandeController::class, 'createOrder']);
-Route::get('/commande/{id}', [CommandeController::class, 'index']); // Corrigez le nom du contrôleur ici
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 
 // Route::get('/test-insert', function () {
@@ -95,3 +95,9 @@ Route::get('/commande/{id}', [CommandeController::class, 'index']); // Corrigez 
 //         return 'Test insert failed: ' . $e->getMessage();
 //     }
 // });
+
+// routes/web.php or routes/api.php
+
+Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');

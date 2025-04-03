@@ -22,5 +22,8 @@ class Panier extends Model
     //     return $this->hasOne(Order::class);
     // }
 
-
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

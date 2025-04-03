@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Admin;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -54,7 +55,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class);
     }
-
+    public function panier(): HasOne
+    {
+        return $this->hasOne(Panier::class);
+    }
     protected static function boot()
     {
         parent::boot();
