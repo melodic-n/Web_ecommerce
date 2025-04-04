@@ -35,7 +35,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
+                'Authorization': 'Bearer {{ Auth::user()->createToken("api_token")->plainTextToken }}'
             },
             body: JSON.stringify({
                 user_id: userId,
@@ -60,7 +60,7 @@
         fetch('/api/commandes/create', {
         method: 'POST',
         headers: {
-            'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
+            'Authorization': 'Bearer {{ Auth::user()->createToken("api_token")->plainTextToken }}'
         }
     })
 

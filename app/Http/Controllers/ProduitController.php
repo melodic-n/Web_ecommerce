@@ -19,11 +19,36 @@ class ProduitController extends Controller
         return response()->json($produit); 
     }
 
-    public function store(Request $request)
-    {
-        $produit = Produit::create($request->all());
-        return response()->json($produit, 201);
+    public function apiIndex()
+{
+    $products = Produit::all(); // Use French name if your model is 'Produit'
+    return response()->json($products);
+}
+
+public function store(Request $request)
+{
+    try {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string'
+        ]);
+
+        $product = Produit::create($validated);
+
+        return response()->json([ // ← MUST return JSON
+            'success' => true,
+            'product' => $product,
+            'message' => 'Product added successfully'
+        ], 201); // HTTP 201 Created
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
     public function edit($id)
     {
