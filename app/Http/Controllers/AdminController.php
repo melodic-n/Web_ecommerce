@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Produit;
 
 class AdminController extends Controller
 {
-    public function index()
-    {
-        return view('admin.dashboard');
-    }
+    // app/Http/Controllers/AdminController.php
+public function index()
+{
+    $produits = Produit::all();
+    return view('admin.dashboard', compact('produits'));
+}
 }

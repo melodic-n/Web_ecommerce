@@ -245,26 +245,63 @@
         transform: scale(1.05);
     }
   </style>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Navigation between sections
+    const sections = {
+        dashboardLink: "dashboardSection",
+        productsLink: "productsSection",
+        ordersLink: "ordersSection",
+        customersLink: "customersSection"
+    };
+
+    // Set click handlers for each nav link
+    Object.keys(sections).forEach(linkId => {
+        document.getElementById(linkId)?.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Hide all sections
+            Object.values(sections).forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) section.classList.add('hidden');
+            });
+            
+            // Show the selected section
+            const targetSection = document.getElementById(sections[linkId]);
+            if (targetSection) targetSection.classList.remove('hidden');
+            
+            // Update active link styling
+            document.querySelectorAll('.sidebar a').forEach(link => {
+                link.classList.remove('active');
+            });
+            e.target.classList.add('active');
+        });
+    });
+
+    // Default to showing dashboard
+    document.getElementById('dashboardSection')?.classList.remove('hidden');
+});
+</script>
 </head>
 <body>
   <div class="dashboard">
-    <aside class="sidebar">
-      <h2>Admin Panel</h2>
-      <ul>
-        <li><a href="#" id="dashboardLink" class="active">Dashboard</a></li>
-        <li><a href="#" id="productsLink">Products</a></li>
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+        <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin') ? 'active' : '' }}">Dashboard</a></li>
+        <li><a href="#" id="productsLink" class="{{ request()->is('admin/products*') ? 'active' : '' }}">Products</a></li>
         <li><a href="#" id="ordersLink">Orders</a></li>
         <li><a href="#" id="customersLink">Customers</a></li>
-        <li><a href="#" id="signOutLink">Sign Out</a></li>
-        <a href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="color: white; font-weight: bold;">
-        Logout
-    </a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-      </ul>
-    </aside>
+        <li>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </li>
+    </ul>
+</aside>
     <main class="content">
       <!-- Dashboard Section -->
       <section id="dashboardSection">
@@ -299,45 +336,82 @@
         </div>
       </section>
 
+
+
+
       <!-- Products Section -->
       <section id="productsSection" class="hidden">
-        <header>
-          <h1>Manage Products</h1>
-        </header>
-        <div class="product-form">
-          <form id="addProductForm">
+    <header>
+        <h1>Manage Products</h1>
+    </header>
+    <div class="product-form">
+        <form id="productForm" action="{{ isset($product) ? route('produits.update', $product->id) : route('produits.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @isset($product) @method('PUT') @endisset
             <div class="form-group">
-              <label for="productName">Product Name</label>
-              <input type="text" id="productName" name="productName" required>
+                <label>Product Name</label>
+                <input type="text" name="nom_prod" value="{{ $product->nom_prod ?? '' }}" required>
             </div>
             <div class="form-group">
-              <label for="productPrice">Price</label>
-              <input type="number" id="productPrice" name="productPrice" required>
+                <label>Price</label>
+                <input type="number" name="prix" step="0.01" value="{{ $product->prix ?? '' }}" required>
             </div>
             <div class="form-group">
-              <label for="productDescription">Description</label>
-              <textarea id="productDescription" name="productDescription" required></textarea>
+                <label>Description</label>
+                <textarea name="description" required>{{ $product->description ?? '' }}</textarea>
             </div>
-            <button type="submit">Add Product</button>
-          </form>
-        </div>
-        <div class="product-list">
-          <h2>Product List</h2>
-          <table id="productTable">
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" name="category" value="{{ $product->category ?? '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" name="quantite" value="{{ $product->quantite ?? '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" name="img_prod">
+                @isset($product->img_prod)
+                    <img src="{{ asset('storage/'.$product->img_prod) }}" width="100">
+                @endisset
+            </div>
+            <button type="submit">{{ isset($product) ? 'Update' : 'Add' }} Product</button>
+        </form>
+    </div>
+    <div class="product-list">
+        <table>
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
-              <!-- Product rows will be added here dynamically -->
+                @foreach($produits as $produit)
+                <tr>
+                    <td>{{ $produit->nom_prod }}</td>
+                    <td>${{ number_format($produit->prix, 2) }}</td>
+                    <td>{{ Str::limit($produit->description, 50) }}</td>
+                    <td>
+                        
+                        <form action="{{ route('produits.destroy', $produit->id) }}" method="POST">
+                            @csrf @method('DELETE')
+                            <button type="submit">Delete</button>
+                            <button href="{{ route('produits.edit', $produit->id) }}">Edit</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
             </tbody>
-          </table>
-        </div>
-      </section>
+        </table>
+    </div>
+</section>
+
+
+   
+      
 
       <!-- Orders Section -->
       <section id="ordersSection" class="hidden">

@@ -10,7 +10,7 @@ class Produit extends Model
     use HasFactory;
     protected $table = 'produits';  
 
-    protected $fillable = ['nom_prod', 'img_prod', 'description','category' ,'quatite','prix'];
+    protected $fillable = ['nom_prod', 'img_prod', 'description','category' ,'quantite','prix'];
     
     public function paniers()
     {

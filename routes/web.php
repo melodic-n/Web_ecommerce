@@ -37,13 +37,21 @@ Route::get('/redirect', function () {
     }
 })->middleware('auth');
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::prefix('admin')->group(function () {
-        Route::get('/products', [ProduitController::class, 'apiIndex']); // New method
-        Route::post('/products', [ProduitController::class, 'store']) ->middleware(['auth', 'role:admin']);
-        Route::delete('/products/{produit}', [ProduitController::class, 'destroy']);
+
+
+// Route::middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+//     Route::prefix('admin')->group(function () {
+//         Route::get('/products', [ProduitController::class, 'apiIndex']); // New method
+//         Route::post('/products', [ProduitController::class, 'store']) ->middleware(['auth', 'role:admin']);
+//         Route::delete('/products/{produit}', [ProduitController::class, 'destroy']);
+//     });
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::resource('produits', ProduitController::class)->except(['show']);
     });
+    Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
+Route::put('/produits/{id}', [ProduitController::class, 'update']);
     Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
     Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');  // Get request to show the form
     Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');  // Post request to store data
@@ -52,7 +60,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
     Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
 
-});
+    Route::get('produits/{id}/edit', [ProduitController::class, 'edit']);
 
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.dashboard');
