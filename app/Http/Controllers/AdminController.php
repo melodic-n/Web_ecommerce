@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produit;
+use App\Models\Customer;
+use App\Models\Commande;
 
 class AdminController extends Controller
 {
@@ -11,6 +13,11 @@ class AdminController extends Controller
 public function index()
 {
     $produits = Produit::all();
-    return view('admin.dashboard', compact('produits'));
+    $customers = Customer::with('user')->get(); // Add this new query
+    $commandes = Commande::with(['user', 'panier'])->get(); // Add this line
+    
+    return view('admin.dashboard', compact('produits', 'customers', 'commandes'));
+    
+    
 }
 }

@@ -48,6 +48,8 @@ Route::get('/redirect', function () {
 //     });
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers');
+        Route::get('/admin/commandes', [CommandeController::class, 'index'])->name('admin.commandes');
         Route::resource('produits', ProduitController::class)->except(['show']);
     });
     Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);

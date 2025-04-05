@@ -45,14 +45,11 @@ class CommandeController extends Controller
     }
     
     public function index()
-    {
-        $user = Auth::user();
-        $commande = $user->commande; // Assumes a one-to-one relation; if multiple, use $user->commandes
-
-        if ($commande) {
-            return response()->json($commande);
-        } else {
-            return response()->json(['message' => 'Commande non trouvée pour cet utilisateur'], 404);
-        }
+{
+    if (auth()->user()->role === 'admin') {
+        $commandes = Commande::with(['user', 'panier'])->get();
+        return view('admin.dashboard', compact('commandes')); // Will merge with other data
     }
+   
+}
 }

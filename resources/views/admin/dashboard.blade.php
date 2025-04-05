@@ -244,6 +244,35 @@
         background-color: #0056b3;
         transform: scale(1.05);
     }
+    /* Add to your existing styles */
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.customer-table th, 
+.customer-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.customer-table th {
+    background-color: #f4f4f4;
+}
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.order-table th, 
+.order-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.order-table th {
+    background-color: #f4f4f4;
+}
   </style>
   <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -414,84 +443,66 @@ document.addEventListener('DOMContentLoaded', function() {
       
 
       <!-- Orders Section -->
-      <section id="ordersSection" class="hidden">
-        <header>
-          <h1>Manage Orders</h1>
-        </header>
-        <div class="order-form">
-          <form id="addOrderForm">
-            <div class="form-group">
-              <label for="orderId">Order ID</label>
-              <input type="text" id="orderId" name="orderId" required>
-            </div>
-            <div class="form-group">
-              <label for="customerName">Customer Name</label>
-              <input type="text" id="customerName" name="customerName" required>
-            </div>
-            <div class="form-group">
-              <label for="orderTotal">Total Amount</label>
-              <input type="number" id="orderTotal" name="orderTotal" required>
-            </div>
-            <button type="submit">Add Order</button>
-          </form>
-        </div>
-        <div class="order-list">
-          <h2>Order List</h2>
-          <table id="orderTable">
+     <!-- Orders Section -->
+<section id="ordersSection" class="hidden">
+    <header>
+        <h1>Manage Orders</h1>
+    </header>
+    <div class="order-list">
+        <table class="order-table">
             <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Total Amount</th>
-                <th>Actions</th>
-              </tr>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
             </thead>
             <tbody>
-              <!-- Order rows will be added here dynamically -->
+                @foreach($commandes as $commande)
+                <tr>
+                    <td>{{ $commande->id }}</td>
+                    <td>{{ $commande->user->name ?? 'N/A' }}</td>
+                    <td>{{ number_format($commande->montant, 2) }} €</td>
+                    <td>{{ ucfirst($commande->status) }}</td>
+                </tr>
+                @endforeach
             </tbody>
-          </table>
-        </div>
-      </section>
+        </table>
+    </div>
+</section>
 
       <!-- Customers Section -->
-      <section id="customersSection" class="hidden">
-        <header>
-          <h1>Manage Customers</h1>
-        </header>
-        <div class="customer-form">
-          <form id="addCustomerForm">
-            <div class="form-group">
-              <label for="customerName">Customer Name</label>
-              <input type="text" id="customerName" name="customerName" required>
-            </div>
-            <div class="form-group">
-              <label for="customerEmail">Email</label>
-              <input type="email" id="customerEmail" name="customerEmail" required>
-            </div>
-            <div class="form-group">
-              <label for="customerPhone">Phone</label>
-              <input type="text" id="customerPhone" name="customerPhone" required>
-            </div>
-            <button type="submit">Add Customer</button>
-          </form>
-        </div>
-        <div class="customer-list">
-          <h2>Customer List</h2>
-          <table id="customerTable">
+      <!-- Customers Section -->
+<section id="customersSection" class="hidden">
+    <header>
+        <h1>Manage Customers</h1>
+    </header>
+    <div class="customer-list">
+        <table class="customer-table">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                </tr>
             </thead>
             <tbody>
-              <!-- Customer rows will be added here dynamically -->
+                @foreach($customers as $customer)
+                <tr>
+                    <td>{{ $customer->id }}</td>
+                    <td>{{ $customer->prenom }}</td>
+                    <td>{{ $customer->nom }}</td>
+                    <td>{{ $customer->tel }}</td>
+                    <td>{{ Str::limit($customer->adresse, 30) }}</td>
+                </tr>
+                @endforeach
             </tbody>
-          </table>
-        </div>
-      </section>
+        </table>
+    </div>
+</section>
     </main>
   </div>
   <script>
@@ -500,6 +511,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const ORDERS_KEY = "orders";
     const CUSTOMERS_KEY = "customers";
     const ADMINS_KEY = "admins";
+    // In your section toggle code
+const sections = {
+    dashboardLink: "dashboardSection",
+    productsLink: "productsSection",
+    customersLink: "customersSection", // Add this
+    ordersLink: "ordersSection"
+};
 
     // Function to fetch data from local storage
     function getData(key) {
@@ -710,13 +728,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("adminForm").classList.remove("hidden");
     });
 
-    // Navigation between sections
-    const sections = {
-      dashboardLink: "dashboardSection",
-      productsLink: "productsSection",
-      ordersLink: "ordersSection",
-      customersLink: "customersSection",
-    };
+    
 
     Object.keys(sections).forEach((linkId) => {
       document.getElementById(linkId).addEventListener("click", (e) => {
