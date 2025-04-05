@@ -273,7 +273,211 @@
 .order-table th {
     background-color: #f4f4f4;
 }
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        
+
+        /* Sidebar styles - unchanged from your original */
+        .sidebar {
+            width: 220px;
+            background: #1a1a1a; /* Dark background */
+            color: white;
+            padding: 25px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            padding: 0 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            padding: 12px 25px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar li:hover {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #ff6d00;
+        }
+
+        .sidebar li.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid #ff6d00;
+        }
+
+        .sidebar li i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .welcome-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 200px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hover effects for stat cards */
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: #ff6d00;
+        }
+
+        .stat-card:hover .stat-value {
+            color: white;
+        }
+
+        .stat-card:hover .stat-label {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ff6d00;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6d00;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #ff6d00;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #e65100;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 109, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1a1a1a;
+            color: white;
+            border: 2px solid #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: transparent;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Navigation between sections
@@ -332,12 +536,117 @@ document.addEventListener('DOMContentLoaded', function() {
     </ul>
 </aside>
     <main class="content">
+
+
       <!-- Dashboard Section -->
-      <section id="dashboardSection">
-        <header>
-          <h1>Welcome to the Admin Dashboard</h1>
-        </header>
-        <div class="dashboard-content">
+      
+      <div class="main-content">
+        <div class="dashboard-container">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome Back, Admin!</h1>
+                <p class="welcome-subtitle">Here's what's happening with your store today. Manage your products, track orders, and connect with customers from this dashboard.</p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">326</div>
+                    <div class="stat-label">New Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5,892</div>
+                    <div class="stat-label">Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$24,760</div>
+                    <div class="stat-label">Revenue</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+          <!-- Button in your dashboard -->
+<button id="showProductsBtn" class="btn btn-primary">
+    <i class="fas fa-plus"></i> Add New Product
+</button>
+
+<!-- JavaScript solution -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showBtn = document.getElementById('showProductsBtn');
+    const productsSection = document.getElementById('productsSection');
+    
+    if (showBtn && productsSection) {
+        showBtn.addEventListener('click', function() {
+            // First remove the hidden class
+            productsSection.classList.remove('hidden');
+            
+            // Then scroll to the section smoothly
+            productsSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Optional: Focus on the first input field
+            const firstInput = productsSection.querySelector('input[name="nom_prod"]');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        });
+    } else {
+        console.error('Could not find required elements:', {
+            button: showBtn,
+            section: productsSection
+        });
+    }
+});
+</script>
+<button class="btn btn-secondary" id="showOrdersBtn">
+    <i class="fas fa-clipboard-list"></i> See Your Orders
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Products Section Toggle (keep your existing code)
+    const showProductsBtn = document.getElementById('showProductsBtn');
+    const productsSection = document.getElementById('productsSection');
+    
+    if (showProductsBtn && productsSection) {
+        showProductsBtn.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') e.preventDefault();
+            productsSection.classList.remove('hidden');
+            productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    // New Orders Section Toggle
+    const showOrdersBtn = document.getElementById('showOrdersBtn');
+    const ordersSection = document.getElementById('ordersSection');
+    
+    if (showOrdersBtn && ordersSection) {
+        showOrdersBtn.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') e.preventDefault();
+            
+            // Hide products section if visible
+            if (productsSection && !productsSection.classList.contains('hidden')) {
+                productsSection.classList.add('hidden');
+            }
+            
+            // Show orders section
+            ordersSection.classList.remove('hidden');
+            ordersSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+});
+</script>
+
+            </div>
+        </div>
+    </div>
+
+ 
+        <!-- <div class="dashboard-content">
           <img src="C:\Users\hp\Desktop\dashboard\Welcome-Vector-Graphics-7974449-1-1-580x387 (1).png" alt="Welcome Illustration" class="dashboard-image">
          
           <button id="addAdminButton">Add New Admin</button>
@@ -362,7 +671,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <button type="submit">Save Admin</button>
             </form>
           </div>
-        </div>
+        </div> -->
       </section>
 
 
@@ -477,6 +786,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section id="customersSection" class="hidden">
     <header>
         <h1>Manage Customers</h1>
+        
     </header>
     <div class="customer-list">
         <table class="customer-table">
@@ -499,6 +809,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>{{ Str::limit($customer->adresse, 30) }}</td>
                 </tr>
                 @endforeach
+
+               
             </tbody>
         </table>
     </div>
