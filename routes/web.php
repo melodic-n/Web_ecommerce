@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;  // <-- Make sure this line is added
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('produits.index');
 });
 
 Route::get('/dashboard', function () {
