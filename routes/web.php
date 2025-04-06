@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ContactController;
 
 
 /*
@@ -55,6 +56,7 @@ Route::get('/redirect', function () {
         Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
         Route::resource('produits', ProduitController::class)->except(['show']);
     });
+    Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
     Route::get('/', function () {
         return view('customer.acceuilHandies'); // Home page
     })->name('home');
@@ -88,6 +90,20 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::post('/commandes/create', [CommandeController::class, 'createOrder']);
         Route::get('/paniers', [PanierController::class, 'show']);
 });
+Route::get('/acceuilHandies', function () {
+    return view('customer.acceuilHandies');
+})->name('acceuilHandies');
+// Add this if you DON'T have Laravel Auth installed
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+// Add this to your web.php file
+Route::get('/user/register', function () {
+    return view('customer.user'); // Make sure this view exists
+})->name('customer.user');
+// OR if you're using Laravel Auth (recommended), just run:
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -99,8 +115,8 @@ require __DIR__.'/auth.php';
 
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+    ->name('logout')
+    ->middleware('auth');
 
 
 // Route::get('/test-insert', function () {

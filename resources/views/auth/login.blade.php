@@ -316,11 +316,11 @@
             <button type="submit">Se connecter</button>
 
             @if (Route::has('password.request'))
-                <div class="forgot-password">
-                    <a href="{{ route('password.request') }}">
-                        Mot de passe oublié?
-                    </a>
-                </div>
+            <div class="create-account-container">
+    <a href="{{ route('customer.user') }}" class="create-account-btn">
+        <i class="fas fa-user-plus"></i> Vous n'avez pas de compte ? Créez-en un ici
+    </a>
+</div>
             @endif
         </form>
     </div>

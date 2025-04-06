@@ -15,8 +15,8 @@
         <nav>
     <ul>
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
-        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('contact') }}"></a></li> 
+        <li><a href="{{ route('dashboard') }}"></a></li>
         <li><a href="{{ route('about') }}">About Us</a></li>
     </ul>
 </nav>
@@ -34,13 +34,90 @@
         <div class="content">
             <h1>Welcome to our <br> Moroccan Handicrafts shop</h1>
             <p>Moroccan handicrafts are an essential part of the country's heritage, reflecting Berber, Arab, Andalusian, and African influences.</p>
-            <button class="next-btn">NEXT</button>
+            <!-- <li><a href="{{ route('login') }}">NEXT</a></li> -->
+            <li>
+    <a href="{{ route('login') }}" class="somo-btn">
+        NEXT <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+</li>
+
+<style>
+.somo-btn {
+    /* Base styles */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E77A4B; /* Somo base color */
+    color: white;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #E77A4B;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    
+    /* Hover effects */
+    &:hover {
+        background-color: transparent;
+        color: #E77A4B;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(231, 122, 75, 0.2);
+    }
+    
+    /* Active state */
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Focus state */
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(231, 122, 75, 0.3);
+    }
+    
+    /* Icon animation */
+    i {
+        transition: transform 0.3s ease;
+    }
+    
+    &:hover i {
+        transform: translateX(4px);
+    }
+}
+
+/* If you want a dark version alternative */
+.somo-btn.dark {
+    background-color: #333;
+    border-color: #333;
+    color: white;
+    
+    &:hover {
+        color: #333;
+        background-color: transparent;
+    }
+}
+</style>
+            <!-- <button class="next-btn">NEXT</button>
+             -->
+            
+<!-- <script>
+document.querySelector('.next-btn').addEventListener('click', function() {
+    window.location.href = "{{ route('login') }}";
+
+});
+</script> -->
+
 
             <script>
                 // Sélectionner le bouton "NEXT"
                 document.querySelector('.next-btn').addEventListener('click', function() {
                     // Rediriger vers une autre page
-                    window.location.href = 'produits.html';  // Remplacez par le lien de la page vers laquelle vous voulez aller
+                    window.location.href = 'auth/login';  // Remplacez par le lien de la page vers laquelle vous voulez aller
                 });
             </script>
                     </div>

@@ -292,19 +292,46 @@
             color: black;
             font-size: 10px; /* Réduction de la taille du texte */
         }
+        .logout-container {
+    margin-left: 20px; /* Adjust spacing as needed */
+}
+
+.logout-btn {
+    background-color: #000; /* Black background */
+    color: #E77A4B; /* Somo (Moroccan terracotta) text */
+    border: 2px solid #E77A4B; /* Pink border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background-color: #E77A4B; /* Pink background on hover */
+    color: #000; /* Black text on hover */
+}
+
+.logout-btn i {
+    font-size: 16px;
+}
     </style>
    
 <script src="{{ asset('js/customer/produits.js') }}"></script>
 
 
 
-<a href="{{ route('logout') }}"
-     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-      Logout
-  </a>
-  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-      @csrf
-  </form>
+<div class="logout-container">
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <button class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+</div>
 </body>
 </html>
 

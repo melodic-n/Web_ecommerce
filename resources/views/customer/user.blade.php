@@ -4,25 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moroccan Handicrafts</title>
-    <link rel="stylesheet" href="user.css">
+    <link rel="stylesheet" href="{{ asset('css/customer/user.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <div class="left-image">
-        <img src="handies_loginImage.png" alt="Image de login">
+<div class="left-image">
+        <img src="{{ asset('images/handies_loginImage.png') }}" alt="Image de login">
     </div>
     <header>
         <div class="logo">
-            <img src="logo_handies.png" alt="Logo">
+            <img src="{{ asset('images/logo_handies.png') }}" alt="Logo">
         </div>
-        <nav>
-            <ul>
-                <li><a href="acceuilHandies.html">Home</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Service d'achat</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
+        <ul>
+        <!-- <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('about') }}">About Us</a></li> -->
+    </ul>
         
         <div class="icons">
             <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
