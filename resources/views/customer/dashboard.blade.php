@@ -13,73 +13,90 @@
         <button type="submit">Add to Panier</button>
     </form>
 
-    <h2>Create Order</h2>
-    <button id="create-order-btn">Create Order</button>
+    <h2>Create Order and Proceed to Payment</h2>
+    <button id="create-order-payment-btn">Create Order & Pay with PayPal</button>
 
     <div id="api-results"></div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    const addToPanierForm = document.getElementById('add-to-panier-form');
-    const createOrderBtn = document.getElementById('create-order-btn');
-    const apiResultsDiv = document.getElementById('api-results');
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToPanierForm = document.getElementById('add-to-panier-form');
+            const createOrderPaymentBtn = document.getElementById('create-order-payment-btn');
+            const apiResultsDiv = document.getElementById('api-results');
 
-    addToPanierForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+            addToPanierForm.addEventListener('submit', function(event) {
+                event.preventDefault();
 
-        const userId = document.querySelector('input[name="user_id"]').value;
-        const productId = document.getElementById('product_id').value;
-        const quantity = document.getElementById('quantity').value;
+                const userId = document.querySelector('input[name="user_id"]').value;
+                const productId = document.getElementById('product_id').value;
+                const quantity = document.getElementById('quantity').value;
 
-        fetch('/api/panier', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                produits: [{ id: productId, quantite: quantity }]
-            })
-        })
-        .then(response => response.text()) // Get response as text first
-        .then(data => {
-            try {
-                const json = JSON.parse(data); // Try to parse as JSON
-                apiResultsDiv.innerText = JSON.stringify(json, null, 2);
-            } catch (error) {
-                apiResultsDiv.innerText = 'Error parsing JSON: ' + error;
-            }
-        })
-        .catch(error => {
-            apiResultsDiv.innerText = 'Error: ' + error;
+                fetch('/api/panier', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        produits: [{ id: productId, quantite: quantity }]
+                    })
+                })
+                .then(response => response.json()) // Expect JSON response for Panier creation
+                .then(data => {
+                    apiResultsDiv.innerText = 'Panier Created: ' + JSON.stringify(data, null, 2);
+                    // Store the panier ID for the next step
+                    createOrderPaymentBtn.dataset.panierId = data.id;
+                })
+                .catch(error => {
+                    apiResultsDiv.innerText = 'Error creating Panier: ' + error;
+                });
+            });
+
+            createOrderPaymentBtn.addEventListener('click', function() {
+                const panierId = this.dataset.panierId;
+                if (!panierId) {
+                    apiResultsDiv.innerText = 'Error: No Panier ID found. Please add to Panier first.';
+                    return;
+                }
+
+                fetch(`/api/commandes/create/${panierId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
+                    }
+                })
+                .then(response => response.json()) // Expect JSON response with order_id
+                .then(data => {
+                    apiResultsDiv.innerText = 'Order Created: ' + JSON.stringify(data, null, 2);
+                    if (data.order_id) {
+                        // Redirect to the PayPal payment form, passing the order ID
+                        window.location.href = `/payment/form?order_id=${data.order_id}&amount=${document.getElementById('amount').value}&description=Payment for order #${data.order_id}`;
+                    } else {
+                        apiResultsDiv.innerText = 'Error: Order ID not received.';
+                    }
+                })
+                .catch(error => {
+                    apiResultsDiv.innerText = 'Error creating Order: ' + error;
+                });
+            });
         });
-    });
-
-    createOrderBtn.addEventListener('click', function() {
-        fetch('/api/commandes/create', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
-        }
-    })
-
-        .then(response => response.text()) // Get response as text first
-        .then(data => {
-            try {
-                const json = JSON.parse(data); // Try to parse as JSON
-                apiResultsDiv.innerText = JSON.stringify(json, null, 2);
-            } catch (error) {
-                apiResultsDiv.innerText = 'Error parsing JSON: ' + error;
-            }
-        })
-        .catch(error => {
-            apiResultsDiv.innerText = 'Error: ' + error;
-        });
-    });
-});
-
     </script>
+
+    <h2>Manual Payment Form (for testing if direct link works)</h2>
+    <form method="POST" action="{{ route('paypal.create') }}">
+        @csrf
+        <input type="hidden" name="order_id" id="manual-order-id">
+        <div class="form-group">
+            <label for="amount">Amount ($):</label>
+            <input type="number" class="form-control" name="amount" id="amount" value="10.00" step="0.01" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" name="description" value="Test Payment" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Pay with PayPal (Manual)</button>
+    </form>
 
     <a href="{{ route('logout') }}"
        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

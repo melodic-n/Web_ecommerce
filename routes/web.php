@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; 
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\CommandeController;
-
+use App\Http\Controllers\PaypalController; // Make sure this use statement is present
 
 /*
 |--------------------------------------------------------------------------
@@ -101,3 +101,23 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+
+Route::get('/payment/success-page', function () {
+    return view('payment.success');
+})->name('payment.success');
+
+Route::get('/payment/cancel-page', function () {
+    return view('payment.cancel');
+})->name('payment.cancel');
+
+Route::get('/payment/error-page', function () {
+    return view('payment.error');
+})->name('payment.error');
+
+Route::get('/payment/form', function () {
+    return view('payment.form');
+})->name('payment.form');
+
+Route::post('/paypal/create', [PaypalController::class, 'createPayment'])->name('paypal.create');
+
