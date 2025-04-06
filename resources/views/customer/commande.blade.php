@@ -65,8 +65,6 @@
                     <input type="radio" id="paiement-livraison" name="payment_method" value="livraison" checked>
                     <label for="paiement-livraison">Paiement à la livraison</label>
                 </div>
-
-          
             </div>
         </div>
 
@@ -269,20 +267,10 @@ document.addEventListener('DOMContentLoaded', function() {
         commandeItems.innerHTML = '<p>Votre panier est vide</p>';
     }
 
-    const paiementCarte = document.getElementById('paiement-carte');
     const paiementLivraison = document.getElementById('paiement-livraison');
-    const carteDetails = document.getElementById('carte-details');
-
-    paiementCarte.addEventListener('change', function() {
-        if (this.checked) {
-            carteDetails.classList.remove('hidden');
-        }
-    });
 
     paiementLivraison.addEventListener('change', function() {
-        if (this.checked) {
-            carteDetails.classList.add('hidden');
-        }
+        // Only handle paiement-livraison logic since carte is removed
     });
 
     const confirmerCommande = document.getElementById('confirmer-commande');
@@ -302,21 +290,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        if (paiementCarte.checked) {
-            const cardFields = document.querySelectorAll('#carte-details input');
-            cardFields.forEach(field => {
-                if (!field.value.trim()) {
-                    isValid = false;
-                    field.classList.add('error');
-                } else {
-                    field.classList.remove('error');
-                }
-            });
-        }
-
         if (isValid) {
 
-            alert('Votre commande a été confirmée! Vous recevrez un email de confirmation.');
+            alert('Votre commande a été confirmée! ');
 
             localStorage.removeItem('cart');
 

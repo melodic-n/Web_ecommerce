@@ -56,7 +56,10 @@
     </nav>
     
             <div class="icons">
-                <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
+              <script src="{{ asset('js/customer/produits.js') }}"></script>
+  <a href="javascript:void(0)" class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i> 
+            </a>            
                 <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
             </div>
     </header>
