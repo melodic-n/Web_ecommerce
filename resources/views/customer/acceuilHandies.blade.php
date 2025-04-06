@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moroccan Handicrafts</title>
-    <link rel="stylesheet" href="acceuilHandies.css">
+    <link href="{{ asset('css/customer/acceuilHandies.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="logo_handies.png" alt="Logo">
+    <div class="logo">
+            <img src="images/customer/logo_handies.png" alt="Logo">
         </div>
         <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="produits.html">Service d'achat</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
-        <div class="search-bar">
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('about') }}">About Us</a></li>
+    </ul>
+</nav>
+        <!-- <div class="search-bar">
             <input type="text" placeholder="Search">
             <button class="search-icon"><i class="fas fa-search"></i></button>
-        </div>
+        </div> -->
         <div class="icons">
             <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
             <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
@@ -45,7 +45,7 @@
             </script>
                     </div>
         <div class="image">
-            <img src="image_pageAcceuil.png" alt="Moroccan Handicrafts">
+            <img src="images/image_pageAcceuil.png" alt="Moroccan Handicrafts">
         </div>
     </main>
 

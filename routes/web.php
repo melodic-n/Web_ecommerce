@@ -55,7 +55,17 @@ Route::get('/redirect', function () {
         Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
         Route::resource('produits', ProduitController::class)->except(['show']);
     });
+    Route::get('/', function () {
+        return view('customer.acceuilHandies'); // Home page
+    })->name('home');
     
+    Route::get('/about', function () {
+        return view('customer.aboutUs');
+    })->name('about');
+    
+    Route::get('/contact', function () {
+        return view('customer.contactUs');
+    })->name('contact');
     Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
 Route::put('/produits/{id}', [ProduitController::class, 'update']);
     Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');

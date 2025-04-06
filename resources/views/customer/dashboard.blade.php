@@ -10,16 +10,16 @@
 <body>
     <header>
         <div class="logo">
-            <img src="logo_handies.png" alt="Logo">
+            <img src="images/customer/logo_handies.png" alt="Logo">
         </div>
         <nav>
-            <ul>
-                <li><a href="acceuilHandies.html">Home</a></li>
-                <li><a href="#">Contact  Us</a></li> 
-                <li><a href="#">Service d'achat</a></li>
-                <li><a href="aboutUs.html">About Us</a></li>
-            </ul>
-        </nav>
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('about') }}">About Us</a></li>
+    </ul>
+</nav>
         <div class="search-bar">
             <input type="text" id="searchBar" placeholder="Recherchez un produit..." onkeyup="filterProducts()">
             <button class="search-icon"><i class="fas fa-search"></i></button>

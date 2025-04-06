@@ -12,18 +12,17 @@
 <body>
 
     <header>
-        <div class="logo">
+    <div class="logo">
             <img src="images/customer/logo_handies.png" alt="Logo">
-            
         </div>
         <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Service d'achat</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('about') }}">About Us</a></li>
+    </ul>
+</nav>
         
         <div class="icons">
             <a href="#"><i class="fas fa-shopping-cart"></i></a>
@@ -49,6 +48,7 @@
             </div>
             <div class="image-content">
                 <div class="orbit">
+                <!-- <div class="image-container" style="background-image: url(images/customer/Produit1.jpg);"></div> -->
                     <img src="images/customer/aboutUs_img1.jpg" class="about-us-image" alt="Image circulaire" />
                     <div class="star star1"></div>
                     <div class="star star2"></div>
@@ -101,7 +101,7 @@
             <div class="product-description">
                 <h3>Produit 1</h3>
                 <p>Découvrez notre magnifique produit fait à la main, représentant l'artisanat marocain traditionnel. Chaque pièce est unique.</p>
-                <a href="produits.html" class="discover-more-btn">Discover More</a>
+                <a href="{{ route('home') }}" class="discover-more-btn">Discover More</a>
             </div>
         </div>
         <div class="product-item">
@@ -109,7 +109,7 @@
             <div class="product-description">
                 <h3>Produit 2</h3>
                 <p>Un autre produit artisanal d'exception, façonné par nos artisans locaux. Parfait pour ajouter une touche traditionnelle à votre intérieur.</p>
-                <a href="produits.html" class="discover-more-btn">Discover More</a>
+                <a href="{{ route('home') }}"  class="discover-more-btn">Discover More</a>
             </div>
         </div>
     </div>
