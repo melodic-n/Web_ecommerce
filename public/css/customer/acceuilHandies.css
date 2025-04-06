@@ -1,0 +1,162 @@
+/* Styles généraux */
+body {
+    background-color: black;
+    color: #F4C4B0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* En-tête */
+header {
+    background-color: #F4C4B0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px; /* Réduction du padding */
+    height: 50px; /* Hauteur réduite */
+}
+
+/* Logo */
+.logo img {
+    width: 130px; /* Augmentation de la taille */
+    height: auto;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+/* Barre de recherche */
+.search-bar {
+    position: relative;
+    width: 250px;  /* Largeur de la barre de recherche */
+
+}
+
+.search-bar input {
+    padding: 8px 8px 8px 30px; /* Espace à gauche pour l'icône */
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    width: 100%;
+    font-size: 16px;
+    margin-left: 10px;  /* Déplace le champ un peu à gauche */
+
+}
+
+/* Icône de recherche */
+.search-icon {
+    position: absolute;
+    left: 10px;  /* Positionne l'icône à gauche */
+    top: 50%;
+    transform: translateY(-50%); /* Centre l'icône verticalement */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: grey; /* Couleur de l'icône en gris */
+}
+
+.search-icon i {
+    font-size: 18px; /* Taille de l'icône */
+}
+
+/* Icônes */
+.icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-link {
+    text-decoration: none;
+}
+
+.icons i {
+    font-size: 22px;
+    cursor: pointer;
+    color: #E77A4B; /* Couleur des icônes */
+    transition: color 0.3s ease-in-out;
+}
+.icons a {
+    position: relative;
+    z-index: 10;
+}
+
+.icons i:hover {
+    color: #B28672; /* Couleur des icônes au survol */
+}
+
+/* Contenu principal */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+}
+
+/* Texte de la page */
+.content {
+    max-width: 50%;
+}
+
+h1 { 
+    font-size: 42px; /* Augmentation de la taille */
+    line-height: 1.3;
+    color: #F4C4B0;
+}
+
+p {
+    color: white;
+}
+
+/* Bouton NEXT */
+.next-btn {
+    background-color: #B28672;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    border-radius: 35px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.next-btn:hover {
+    background-color: #8B5E48; /* Assombrit le bouton au survol */
+}
+
+/* Image principale */
+.image img {
+    width: 400px;
+    height: auto;
+    margin-top: -190px; /* Déplace l'image vers le haut */
+}
+
+
+
+@keyframes moveImage {
+    0% { transform: translateX(-20px); } /* Déplacer un peu vers la gauche */
+    50% { transform: translateX(20px); } /* Déplacer un peu vers la droite */
+    100% { transform: translateX(-20px); } /* Revenir à gauche */
+}
+
+.image img {
+    width: 400px;
+    height: auto;
+    animation: moveImage 3s ease-in-out infinite; /* Animation infinie */
+}

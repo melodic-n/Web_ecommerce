@@ -1,0 +1,309 @@
+body {
+    background-color: black;
+    color: #F4C4B0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* En-tête */
+header {
+    background-color: #F4C4B0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px; /* Réduction du padding */
+    height: 50px; /* Hauteur réduite */
+}
+
+/* Logo */
+.logo img {
+    width: 130px;
+    height: auto;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+/* Barre de recherche */
+.search-bar {
+    position: relative;
+    width: 250px;
+}
+
+.search-bar input {
+    padding: 8px 8px 8px 30px; /* Espace à gauche pour l'icône */
+    border-radius: 15px;
+    border: 2px solid #E77A4B;  /* Changer la couleur de la bordure ici */
+    width: 100%;
+    font-size: 16px;
+    margin-left: 10px; 
+}
+
+/* Icône de recherche */
+.search-icon {
+    position: absolute;
+    left: 5px;  
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: grey;
+}
+
+.search-icon i {
+    font-size: 18px;
+}
+
+/* Icônes */
+.icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-link {
+    text-decoration: none;
+}
+
+.icons i {
+    font-size: 22px;
+    cursor: pointer;
+    color: #E77A4B;
+    transition: color 0.3s ease-in-out;
+}
+
+.icons i:hover {
+    color: #B28672;
+}
+
+/* Rectangle des produits */
+.rectangle {
+    position: relative;
+    width: 300px; /* Taille réduite pour mieux s'ajuster */
+    height: 350px; /* Ajustement de la hauteur */
+    background-color: white;
+    border-radius: 20px; /* Arrondi plus léger */
+    margin-right: 20px; 
+    margin-bottom: 20px; 
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère pour plus de profondeur */
+}
+
+.rectangle:hover {
+    transform: scale(1.05); /* Augmente légèrement la taille du rectangle */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ombre plus forte pour l'effet de profondeur */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition douce */
+}
+
+/* Partie haute du rectangle (image du produit) */
+.rectangle .image-container {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px 20px 0 0; 
+}
+
+/* Partie basse du rectangle (infos supplémentaires) */
+.rectangle .info-container {
+    padding: 15px;
+    background-color: #dfdcda;
+    border-radius: 0 0 20px 20px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Nom du produit */
+.rectangle .info-container .product-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Prix du produit */
+.rectangle .info-container .product-price {
+    font-size: 16px;
+    color: #e77a4b;
+}
+
+/* Style pour les descriptions */
+.rectangle .info-container .product-description {
+    font-size: 14px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Partie des étoiles */
+.rectangle .product-rating {
+    display: flex;
+    gap: 5px; 
+    justify-content: flex-start; 
+    margin-bottom: 10px;
+}
+
+.rectangle .product-rating i {
+    font-size: 20px;  
+    color: #B28672;   
+}
+
+/* Bouton Ajouter au panier */
+.add-to-cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background-color: #B28672; 
+    border: none;
+    border-radius: 25px; 
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin-left: 60px;
+}
+
+.add-to-cart-btn i {
+    font-size: 18px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #E77A4B;
+}
+
+/* Conteneur des produits */
+.products {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;
+    justify-content: space-between; 
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 80px; 
+}
+
+/* Texte générique */
+p {
+    color: white;
+}
+
+/* Panier */
+
+.cart-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrer le panier */
+    background-color: #B28672;
+    width: 450px;
+    height: 550px; /* Ajustez la hauteur si nécessaire */
+    padding: 20px;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Organiser les éléments en colonne */
+    justify-content: space-between; /* Espacement entre les éléments */
+    display: none; /* Par défaut, il est caché */
+    z-index: 1000;
+    transition: transform 0.3s ease; /* Transition douce lors de l'apparition du panier */
+    border-radius: 25px; /* Arrondir les coins avec un rayon de 25px */
+}
+
+
+
+/* Vous pouvez personnaliser les autres éléments de votre panier ici */
+
+
+.cart-container.show {
+    display: block; /* Afficher le panier */
+    transform: translate(-50%, -50%) scale(1); /* Animation pour le rendre visible */
+}
+
+.cart-container h2 {
+    margin-top: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cart-item img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.cart-item .product-name {
+    flex: 1;
+    font-size: 14px;
+}
+
+.cart-item .product-price {
+    font-weight: bold;
+    color: #E77A4B;
+}
+
+/* Style pour les boutons Fermer et Supprimer */
+button {
+    border-radius: 12px; /* Coins arrondis */
+    padding: 10px 20px; /* Ajouter un peu d'espace à l'intérieur des boutons */
+    color: #333; /* Couleur du texte */
+    font-size: 14px;
+    border: none; /* Enlever la bordure par défaut */
+    cursor: pointer; /* Curseur de type main */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Effet au survol */
+button:hover {
+    background-color: #E77A4B; /* Couleur au survol */
+    transform: scale(1.05); /* Effet d'agrandissement au survol */
+}
+
+/* Style spécifique pour le bouton Fermer */
+.btn-close {
+    background-color: #F4C4B0;
+    font-size: 14px; /* Réduit la taille du texte */
+
+}
+
+/* Style spécifique pour le bouton Supprimer */
+.remove-from-cart {
+    background-color: #F4C4B0;
+    padding: 5px 15px; /* Réduit la taille du bouton */
+    font-size: 14px; /* Réduit la taille du texte */
+    border: 2px solid #E77A4B; /* Augmente la bordure avec une couleur personnalisée */
+    border-radius: 25px; /* Bords arrondis */
+    height: 40px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Ajout d'une transition */
+}
+.passer-cmd {
+    font-size: 14px; /* Gardez la taille du texte normale */
+    margin-top: 30px; /* Supprime le décalage supplémentaire */
+    align-self: flex-start; /* Aligne le bouton à gauche (ou modifiez selon votre préférence) */
+}
+.image-container {
+    width: 100%;
+    height: 200px; /* Adjust as needed */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
