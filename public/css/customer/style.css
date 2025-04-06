@@ -208,6 +208,75 @@ nav ul li a {
     height: auto;
     object-fit: cover;
 }
+/* Corps de la page */
+body {
+    background-color: black;
+    color: #F4C4B0; /* Lighter text color for contrast */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* En-tête */
+header {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px;
+    height: 50px;
+    color: #F4C4B0;
+}
+
+/* Card Styles */
+.card {
+    background-color: #222;
+    color: #F4C4B0;
+}
+
+.card-header {
+    background-color: #333;
+    color: #E77A4B;
+}
+
+/* Buttons */
+.btn-warning {
+    background-color: #E77A4B;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #B28672;
+}
+
+/* Input Fields */
+.form-control {
+    background-color: #333;
+    border: 1px solid #E77A4B;
+    color: white;
+}
+
+/* Labels */
+label {
+    color: #E77A4B;
+}
+
+/* Footer */
+footer {
+    background-color: black;
+    color: #F4C4B0;
+    padding: 10px 0;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Text Colors */
+.text-warning {
+    color: #E77A4B;
+}
 
 /* Footer - RENDU PLUS PETIT */
 footer {

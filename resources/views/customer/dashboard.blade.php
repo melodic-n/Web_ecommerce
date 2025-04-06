@@ -226,7 +226,7 @@
 </div>
 <!-- Rectangle produit 12 -->
 <div class="rectangle" data-name="Nom du produit 12">
-<div class="image-container" style="background-image: url(images/customer/produit12.jpg);"></div>
+<div class="image-container" style="background-image: url(images/customer/Produit12.jpg);"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -267,7 +267,12 @@
             <p>&copy; 2025 Moroccan Handicrafts. All rights reserved.</p>
         </div>
     </footer>
-
+    <script>
+        var userId = {{ auth()->user()->id }};  
+        var orderRoute = "/commande";
+    </script>
+    
+    
     <style>
         .footer-container {
             display: flex;
@@ -325,14 +330,6 @@
 
 
 
-<div class="logout-container">
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <button class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </button>
-</div>
 </body>
 </html>
 
