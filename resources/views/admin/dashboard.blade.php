@@ -723,29 +723,81 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th>Name</th>
                     <th>Price</th>
                     <th>Description</th>
-                    <th>Actions</th>
+                    <th>
+  <span style="display:inline-block; width: 400px;"></span>Actions
+</th>
+
                 </tr>
             </thead>
             <tbody>
-                @foreach($produits as $produit)
-                <tr>
-                    <td>{{ $produit->nom_prod }}</td>
-                    <td>${{ number_format($produit->prix, 2) }}</td>
-                    <td>{{ Str::limit($produit->description, 50) }}</td>
-                    <td>
-                        
-                        <form action="{{ route('produits.destroy', $produit->id) }}" method="POST">
-                            @csrf @method('DELETE')
-                            <button type="submit">Delete</button>
-                            <button href="{{ route('produits.edit', $produit->id) }}">Edit</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+        @foreach($produits as $produit)
+        <tr>
+            <td>{{ $produit->nom_prod }}</td>
+            <td>{{ $produit->prix }}</td>
+            <td>{{ $produit->description }}</td>
+            <td class="action-buttons">
+                <!-- Edit Button -->
+                <button class="edit-btn" 
+                        data-id="{{ $produit->id }}"
+                        data-name="{{ $produit->nom_prod }}"
+                        data-price="{{ $produit->prix }}"
+                        data-description="{{ $produit->description }}">
+                    Edit
+                </button>
+
+                <!-- Delete Form -->
+                <form class="delete-form" method="POST" action="{{ route('produits.destroy', $produit->id) }}">
+                    @csrf @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
         </table>
     </div>
 </section>
+<script>
+function loadProductToForm(productId) {
+  // Fetch product data
+  fetch(`/produits/${productId}/edit`)
+    .then(response => response.json())
+    .then(product => {
+      // Fill the form
+      document.getElementById('nom_prod').value = product.nom_prod;
+      document.getElementById('prix').value = product.prix;
+      document.getElementById('description').value = product.description;
+      document.getElementById('category').value = product.category;
+      document.getElementById('quantite').value = product.quantite;
+      
+      // Change form action to update
+      const form = document.getElementById('addProductForm');
+      form.action = `/produits/${productId}`;
+      
+      // Add hidden _method field for PUT
+      if (!form.querySelector('input[name="_method"]')) {
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PUT';
+        form.appendChild(methodInput);
+      }
+      
+      // Change button text
+      form.querySelector('button[type="submit"]').textContent = 'Update Product';
+    });
+}
+
+// Reset form when adding new product
+function resetProductForm() {
+  document.getElementById('addProductForm').reset();
+  const form = document.getElementById('addProductForm');
+  form.action = '/produits';
+  form.querySelector('button[type="submit"]').textContent = 'Add Product';
+  const methodInput = form.querySelector('input[name="_method"]');
+  if (methodInput) form.removeChild(methodInput);
+}
+</script>
 
 
    

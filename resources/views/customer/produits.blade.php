@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moroccan Handicrafts</title>
-    <link rel="stylesheet" href="{{ asset('css/customer/produits.css') }}">
+    <link rel="stylesheet" href="produits.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -45,7 +45,7 @@
         <div class="products">
             <!-- Rectangle produit 1 -->
             <div class="rectangle" data-name="Nom du produit 1">
-            <div class="image-container" style="background-image: url(images/customer/Produit1.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit1.jpg');"></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -62,7 +62,7 @@
 
             <!-- Rectangle produit 2 -->
             <div class="rectangle" data-name="Nom du produit 2">
-            <div class="image-container" style="background-image: url(images/customer/Produit2.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit5.jpg')"  id="produit2-image" ;></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -79,7 +79,7 @@
 
             <!-- Rectangle produit 3 -->
             <div class="rectangle" data-name="Nom du produit 3">
-            <div class="image-container" style="background-image: url(images/customer/Produit3.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit3.jpg');"></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -96,7 +96,7 @@
 
             <!-- Rectangle produit 4 -->
             <div class="rectangle" data-name="Nom du produit 4">
-            <div class="image-container" style="background-image: url(images/customer/produit4.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit2.jpg');"></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -113,7 +113,7 @@
 
             <!-- Rectangle produit 5 -->
             <div class="rectangle" data-name="Nom du produit 5">
-            <div class="image-container" style="background-image: url(images/customer/produit5.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit4.jpg');"></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -130,7 +130,7 @@
 
             <!-- Rectangle produit 6 -->
             <div class="rectangle" data-name="Nom du produit 6">
-            <div class="image-container" style="background-image: url(images/customer/produit6.jpg);"></div>
+                <div class="image-container" style="background-image: url('Produit6.jpg');"></div>
                 <div class="info-container">
                     <!-- Section des étoiles et icône Ajouter au panier -->
                     <div class="product-rating">
@@ -147,7 +147,7 @@
 
             <!-- Rectangle produit 7 -->
 <div class="rectangle" data-name="Nom du produit 7">
-<div class="image-container" style="background-image: url(images/customer/produit7.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit7.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -163,7 +163,7 @@
 
 <!-- Rectangle produit 8 -->
 <div class="rectangle" data-name="Nom du produit 8">
-<div class="image-container" style="background-image: url(images/customer/produit8.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit8.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -179,7 +179,7 @@
 
 <!-- Rectangle produit 9 -->
 <div class="rectangle" data-name="Nom du produit 9">
-<div class="image-container" style="background-image: url(images/customer/produit9.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit9.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -195,7 +195,7 @@
 
 <!-- Rectangle produit 10 -->
 <div class="rectangle" data-name="Nom du produit 10">
-<div class="image-container" style="background-image: url(images/customer/produit10.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit10.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -210,7 +210,7 @@
 </div>
 <!-- Rectangle produit 11 -->
 <div class="rectangle" data-name="Nom du produit 11">
-<div class="image-container" style="background-image: url(images/customer/produit11.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit11.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -225,7 +225,7 @@
 </div>
 <!-- Rectangle produit 12 -->
 <div class="rectangle" data-name="Nom du produit 12">
-<div class="image-container" style="background-image: url(images/customer/produit12.jpg);"></div>
+    <div class="image-container" style="background-image: url('Produit12.jpg');"></div>
     <div class="info-container">
         <div class="product-rating">
             <i class="fas fa-star"></i>
@@ -293,18 +293,7 @@
             font-size: 10px; /* Réduction de la taille du texte */
         }
     </style>
-   
-<script src="{{ asset('js/customer/produits.js') }}"></script>
+    <script src="produits.js"></script>
 
-
-
-<a href="{{ route('logout') }}"
-     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-      Logout
-  </a>
-  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-      @csrf
-  </form>
 </body>
 </html>
-

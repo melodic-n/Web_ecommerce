@@ -51,8 +51,11 @@ Route::get('/redirect', function () {
         Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers');
         
         Route::get('/admin/commandes', [CommandeController::class, 'index'])->name('admin.commandes');
+        Route::put('/produits/{id}', [ProduitController::class, 'update']);
+        Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
         Route::resource('produits', ProduitController::class)->except(['show']);
     });
+    
     Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
 Route::put('/produits/{id}', [ProduitController::class, 'update']);
     Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');

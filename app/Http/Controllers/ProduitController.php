@@ -14,12 +14,7 @@ public function index() {
     $produits = Produit::all(); // Make sure this matches your blade variable name
     return view('dashboard', compact('produits'));
 }
-    // public function index()
-    // {
-    //     $produits = Produit::all();
-    //     return response()->json($produits); 
-    // }
-
+    
     public function show($id)
     {
         $produit = Produit::findOrFail($id);

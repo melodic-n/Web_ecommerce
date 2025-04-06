@@ -1,0 +1,339 @@
+/* Corps de la page */
+body {
+    background-color: black;
+    color: #F4C4B0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* En-tête */
+header {
+    background-color: #F4C4B0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px; /* Réduction du padding */
+    height: 50px; /* Hauteur réduite */
+    margin-left: -40px; /* Déplace les éléments vers la gauche */
+}
+
+/* Logo */
+.logo img {
+    width: 130px; /* Augmentation de la taille */
+    height: auto;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+/* Icônes */
+.icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-link {
+    text-decoration: none;
+}
+
+.icons i {
+    font-size: 22px;
+    cursor: pointer;
+    color: #E77A4B; /* Couleur des icônes */
+    transition: color 0.3s ease-in-out;
+}
+
+.icons a {
+    position: relative;
+    z-index: 10;
+}
+
+.icons i:hover {
+    color: #B28672; /* Couleur des icônes au survol */
+}
+
+/* Pied de page */
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #F4C4B0;
+    padding: 3px; /* Réduction de la hauteur */
+}
+
+.footer-section {
+    text-align: center;
+    width: 30%;
+    font-size: 12px; /* Réduction de la taille du texte */
+}
+
+.footer-divider {
+    width: 2px;
+    height: 80px; /* Hauteur augmentée des séparateurs */
+    background-color: #B28672;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 1px;
+    background-color: #F4C4B0;
+    color: black;
+    font-size: 10px; /* Réduction de la taille du texte */
+}
+
+.side-rectangle {
+    width: 370px;
+    height: 480px; /* Hauteur augmentée */
+
+    background-color: #B28672;
+    color: rgb(26, 24, 24);
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #E77A4B;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    position: relative;
+    top: 90px; /* déplace vers le bas */
+    margin-right: 200px; /* pousse le rectangle vers la gauche → effet de droite */
+    margin-left: auto; /* aligne le rectangle à droite */
+}
+
+
+/* Titre */
+.side-rectangle h3 {
+    margin-bottom: 30px;
+    font-size: 22px;
+    text-align: center;
+    margin-left: 0;
+}
+
+/* Formulaire */
+.side-rectangle form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Conteneur des champs */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Labels alignés à gauche avec une largeur fixe */
+.side-rectangle label {
+    font-size: 14px;
+    font-weight: bold;
+    width: 90px; /* largeur uniforme */
+    text-align: left; /* Changement ici */
+}
+
+
+/* Inputs */
+.side-rectangle input,
+.side-rectangle textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border: 2px solid #E77A4B; /* bordure orange */
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: white;
+}
+
+/* Bouton */
+.side-rectangle button {
+    width: 130px;
+    background-color: #E77A4B;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out;
+    margin-top: 20px;
+    align-self: center;
+}
+
+.side-rectangle button:hover {
+    background-color: #B24A2C;
+}
+
+
+/* Lien pour se connecter */
+.side-rectangle .signin-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: white;
+}
+
+.side-rectangle .signin-link a {
+    color: #E77A4B; /* Couleur du lien */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.side-rectangle .signin-link a:hover {
+    color: #B24A2C; /* Couleur du lien au survol */
+}
+
+/* Ajout d'une image à gauche et inclinée */
+.left-image {
+    position: absolute;
+    left: 100px;
+    top: 210px; /* Décale l'image de 100px vers le bas */
+    width: 390px; /* Ajustez la largeur selon votre besoin */
+    height: 100%;
+    overflow: hidden;
+    transform: rotate(-30deg); /* Incline l'image de 15 degrés vers la droite */
+    transform-origin: left top; /* Définit l'origine de la rotation en haut à gauche */
+}
+
+.left-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Garantir que l'image couvre tout l'espace sans être déformée */
+}
+
+/* Cercle avec icône de téléphone */
+.bottom-circle {
+    width: 40px;
+    height: 40px;
+    background-color: bisque; /* ou black si tu veux revenir à du noir */
+    border: 2px solid #E77A4B; /* bordure colorée orange */
+    border-radius: 50%;
+    position: absolute;
+    bottom: -80px; /* dépasse à moitié du bas */
+    left: 55%; /* Décale vers la gauche */
+    transform: translateX(-50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Icône du téléphone dans le cercle */
+.bottom-circle i {
+    font-size: 20px;
+    color: #E77A4B; /* Icône orange */
+    transform: translateY(8px) translateX(8px); /* Déplace l'icône vers le bas et à droite */
+
+}
+
+/* Déplacement du numéro */
+.phone-number {
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Déplacement du numéro vers la droite */
+}
+
+.phone-number span {
+    font-size: 16px;
+    color: #F4C4B0;
+    transform: translate(720px, 45px); /* Déplace le texte 720px vers la droite et 10px vers le bas */
+
+}
+.phone-number span:hover {
+    color: #B24A2C; /* Une teinte plus foncée d'orange au survol */
+}
+
+/* Si tu veux changer la couleur de l'icône au survol */
+.bottom-circle:hover i {
+    color: #B24A2C; /* Une teinte plus foncée d'orange au survol */
+}
+
+
+/* Cercle coloré en bas à droite du rectangle (2e cercle) */
+.bottom-circle-right {
+    width: 40px;
+    height: 40px;
+    background-color: bisque; /* ou black si tu veux revenir à du noir */
+    border: 2px solid #E77A4B; /* bordure colorée orange */
+    border-radius: 50%;
+    position: absolute;
+    bottom: -35px; /* dépasse à moitié du bas */
+    left: 62%; /* Décale davantage vers la droite */
+    transform: translateX(-50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.bottom-circle-right-background {
+    width: 52px; /* Taille un peu plus grande que celle du cercle existant */
+    height: 52px;
+    border: 2px solid rgb(19, 18, 18); /* Bordure noire */
+    border-radius: 50%;
+    position: absolute;
+    bottom: -35px; /* Positionne un peu plus haut que l'autre cercle */
+    left: 62%; /* Décale vers la gauche pour s'aligner avec le cercle existant */
+    transform: translateX(-50%);
+    z-index: 2; /* Place derrière le cercle */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Icône de localisation dans le cercle de droite */
+.bottom-circle-right i {
+    font-size: 18px; /* Taille de l'icône */
+    color: #E77A4B; /* Couleur de l'icône */
+    position: absolute;
+    top: 50%; /* Centre l'icône verticalement */
+    left: 50%; /* Centre l'icône horizontalement */
+    transform: translate(-50%, -50%); /* Centrage exact */
+}
+
+/* Icône de localisation au survol */
+.bottom-circle-right:hover i {
+    color: #B24A2C; /* Changer la couleur au survol */
+}
+
+/* Cercle noir derrière le cercle existant */
+.bottom-circle-background {
+    width: 52px; /* Taille un peu plus grande que celle du cercle existant */
+    height: 52px;
+    border: 2px solid rgb(19, 18, 18); /* Bordure noire */
+    border-radius: 50%;
+    position: absolute;
+    bottom: -82px; /* Positionne un peu plus haut que l'autre cercle */
+    left: 55%; /* Décale vers la gauche pour s'aligner avec le cercle existant */
+    transform: translateX(-50%);
+    z-index: 2; /* Place derrière le cercle */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Conteneur pour le texte de localisation */
+.location-text {
+    position: absolute;
+    top: 50%; /* Aligne verticalement au centre */
+    right: 30px; /* Positionne à droite du rectangle */
+    transform: translateY(-50%); /* Centre le texte verticalement */
+    transform: translateY(300px); /* Déplace le texte un peu plus bas */
+    right: 220px; /* Décale le texte vers la gauche */
+    font-size: 16px; /* Taille du texte */
+    color: #F4C4B0; /* Couleur du texte */
+    font-weight: bold; /* Mettre le texte en gras */
+}
+
+/* Si tu veux appliquer un style au texte au survol (optionnel) */
+.location-text:hover {
+    color: #B24A2C; /* Change la couleur au survol */
+}
