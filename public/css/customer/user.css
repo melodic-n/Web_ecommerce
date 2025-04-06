@@ -117,95 +117,91 @@ footer {
 /* Rectangle latéral */
 .side-rectangle {
     position: fixed;
-    right: 150px; /* Déplacer le rectangle un peu plus à gauche */
-    top: 150px;
-    width: 320px; /* Agrandir la largeur du rectangle */
-    height: 350px; /* Agrandir la hauteur du rectangle */
+    right: 100px; /* Better positioning */
+    top: 100px;
+    width: 380px; /* Increased width */
+    height: 420px; /* Increased height */
     background-color: #B28672;
-    color: rgb(26, 24, 24);
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    color: #1a1818;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
 }
 
-/* Titre dans le rectangle */
 .side-rectangle h3 {
-    margin-bottom: 50px; /* Réduire l'espace sous le titre */
-    font-size: 20px; /* Augmenter la taille du titre */
-    text-align: left; /* Déplacer le titre un peu à gauche */
-    margin-left: -132px; /* Espacement à gauche */
+    margin-bottom: 30px;
+    font-size: 24px; /* Larger title */
+    text-align: center;
+    color: white;
 }
 
-/* Formulaire dans le rectangle */
 .side-rectangle form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px; /* More space between fields */
     width: 100%;
 }
 
-/* Conteneur des champs de saisie */
 .input-container {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
 }
 
-/* Label des champs de saisie */
 .side-rectangle label {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
-    width: 80px; /* Augmenter la largeur du label pour mieux correspondre à l'input */
+    color: white;
 }
 
-/* Input des champs de saisie */
 .side-rectangle input {
-    width: 160px; /* Agrandir l'input */
-    padding: 8px;
+    width: 100%; /* Full width inputs */
+    padding: 12px;
     border: none;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Bouton d'inscription */
 .side-rectangle button {
-    width: 120px; /* Agrandir le bouton */
+    width: 100%;
     background-color: #E77A4B;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: background 0.3s ease-in-out;
-    margin-top: 20px; /* Espacement au-dessus du bouton */
-    align-self: center; /* Centrer le bouton horizontalement */
+    margin-top: 20px;
+    transition: all 0.3s ease;
 }
 
 .side-rectangle button:hover {
     background-color: #B24A2C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Lien pour se connecter */
-.side-rectangle .signin-link {
-    margin-top: 20px;
-    font-size: 14px;
+.signin-link {
+    margin-top: 25px;
+    text-align: center;
     color: white;
+    font-size: 15px;
 }
 
-.side-rectangle .signin-link a {
-    color: #E77A4B; /* Couleur du lien */
-    text-decoration: none;
+.signin-link a {
+    color: #E77A4B;
     font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.side-rectangle .signin-link a:hover {
-    color: #B24A2C; /* Couleur du lien au survol */
+.signin-link a:hover {
+    color: #fff;
+    text-decoration: underline;
 }
 
 /* Ajout d'une image à gauche et inclinée */

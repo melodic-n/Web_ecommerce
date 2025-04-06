@@ -43,13 +43,64 @@
             <button type="submit">S'inscrire</button>
     
             <!-- Nouveau texte en bas -->
-            <div class="signin-link">
+            <!-- <div class="signin-link">
                 <p>Avez-vous déjà un compte ? <a href="login.html">Se connecter</a></p>
-            </div>
+            </div> -->
+            <a href="{{ route('login') }}" class="create-account-btn">
+        <i class="fas fa-user-plus"></i> Avez-vous déjà un compte ? Se connecter
+    </a>
         </form>
     </div>
     
    
 </body>
+<footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <p>Moroccan Handicrafts</p>
+                <p>Artisanat traditionnel</p>
+            </div>
+            <div class="footer-section">
+                <p>contact@handies.ma</p>
+            </div>
+            <div class="footer-section">
+                <p>&copy; 2023 Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+    <style> footer {
+            background-color: #F4C4B0; /* Même couleur que le header */
+            color: black;
+            padding: 8px 0; /* Rembourrage réduit */
+            margin-top: auto;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 13px; /* Texte plus petit */
+        }
 
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            text-align: center;
+            padding: 0 15px; /* Rembourrage réduit */
+        }
+
+        .footer-section p {
+            margin: 3px 0; /* Marges réduites */
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 5px; /* Rembourrage réduit */
+            font-size: 11px; /* Texte plus petit */
+        }
+        </style>
 </html>
