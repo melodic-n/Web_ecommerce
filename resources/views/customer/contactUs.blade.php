@@ -44,20 +44,21 @@
     </div>
     <header>
         <div class="logo">
-            <img src="{{ asset('images/customer/logo_handies.png') }}" alt="Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('contact') }}">Contact Us</a></li> 
-                <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
-                <li><a href="{{ route('about') }}">About Us</a></li>
-            </ul>
-        </nav>
-        <div class="icons">
-            <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
-            <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
-        </div>
+                <img src="images/customer/logo_handies.png" alt="Logo">
+            </div>
+            <nav>
+        <ul>
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('contact') }}">Contact</a></li> 
+            <li><a href="{{ route('dashboard') }}">Service D'achat</a></li>
+            <li><a href="{{ route('about') }}">About Us</a></li>
+        </ul>
+    </nav>
+    
+            <div class="icons">
+                <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
+                <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
+            </div>
     </header>
     
     <!-- Formulaire dans la page HTML -->

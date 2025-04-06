@@ -8,27 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <header>
+<header>
     <div class="logo">
             <img src="images/customer/logo_handies.png" alt="Logo">
         </div>
         <nav>
     <ul>
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('contact') }}"></a></li> 
-        <li><a href="{{ route('dashboard') }}"></a></li>
+        <li><a href="{{ route('contact') }}">Contact</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service D'achat</a></li>
         <li><a href="{{ route('about') }}">About Us</a></li>
     </ul>
 </nav>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search">
-            <button class="search-icon"><i class="fas fa-search"></i></button>
-        </div> -->
+
         <div class="icons">
             <a href="cart.html" class="icon-link"><i class="fas fa-shopping-cart"></i></a>
             <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
         </div>
-    </header>
+</header>
 
     <main>
         <div class="content">

@@ -18,6 +18,7 @@
                 <li><a href="#">Contact  Us</a></li> 
                 <li><a href="#">Service d'achat</a></li>
                 <li><a href="aboutUs.html">About Us</a></li>
+
             </ul>
         </nav>
         <div class="search-bar">

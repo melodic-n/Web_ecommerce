@@ -18,6 +18,7 @@
         <li><a href="{{ route('contact') }}">Contact Us</a></li> 
         <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
         <li><a href="{{ route('about') }}">About Us</a></li>
+        <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
     </ul>
 </nav>
         <div class="search-bar">
