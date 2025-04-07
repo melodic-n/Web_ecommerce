@@ -772,60 +772,50 @@ document.addEventListener('DOMContentLoaded', function() {
     Edit
 </button>
 
-        <div class="modal" id="editModal" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal" id="editModal" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeEditModal()"></button>
             </div>
-            <form id="editProductForm" action="{{ route('admin.products.update', $produit->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PATCH') 
-
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="nom_prod">Product Name</label>
-            <input type="text" id="nom_prod" name="nom_prod" class="form-control" value="{{ old('nom_prod', $produit->nom_prod) }}" >
-        </div>
-
-        <div class="form-group">
-            <label for="prix">Price</label>
-            <input type="number" id="prix" name="prix" class="form-control" value="{{ old('prix', $produit->prix) }}" >
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control">{{ old('description', $produit->description) }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="category">Category</label>
-            <input type="text" id="category" name="category" class="form-control" value="{{ old('category', $produit->category) }}">
-        </div>
-
-        <div class="form-group">
-            <label for="quantite">Quantity</label>
-            <input type="number" id="quantite" name="quantite" class="form-control" value="{{ old('quantite', $produit->quantite) }}">
-        </div>
-
-        <div class="form-group">
-            <label for="img_prod">Product Image</label>
-            <input type="file" id="img_prod" name="img_prod" class="form-control">
-        </div>
-    </div>
-
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeEditModal()">Close</button>
-        <button type="submit" class="btn btn-success">Update Product</button>
-    </div>
-</form>
-
+            <form id="editProductForm" action="" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_nom_prod">Product Name</label>
+                        <input type="text" id="edit_nom_prod" name="nom_prod" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_prix">Price</label>
+                        <input type="number" id="edit_prix" name="prix" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_description">Description</label>
+                        <textarea id="edit_description" name="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_category">Category</label>
+                        <input type="text" id="edit_category" name="category" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_quantite">Quantity</label>
+                        <input type="number" id="edit_quantite" name="quantite" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_img_prod">Product Image</label>
+                        <input type="file" id="edit_img_prod" name="img_prod" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Close</button>
+                    <button type="submit" class="btn btn-success">Update Product</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-
         <!-- Delete Form -->
         <form class="delete-form" method="POST" action="{{ route('admin.products.destroy', $produit->id) }}">
             @csrf @method('DELETE')
@@ -841,21 +831,25 @@ document.addEventListener('DOMContentLoaded', function() {
 </section>
 
 <script>
-  function openEditModal(id, name, price, description, category, quantity) {
+ function openEditModal(id, name, price, description, category, quantity) {
+    // Update form action URL
     const form = document.getElementById('editProductForm');
     form.action = '/admin/products/' + id;
-
+    
     // Set the values for the modal fields
-    document.getElementById('nom_prod').value = name || '';
-    document.getElementById('prix').value = price || '';
-    document.getElementById('description').value = description || '';
-    document.getElementById('category').value = category || '';
-    document.getElementById('quantite').value = quantity || '';
-
+    document.getElementById('edit_nom_prod').value = name || '';
+    document.getElementById('edit_prix').value = price || '';
+    document.getElementById('edit_description').value = description || '';
+    document.getElementById('edit_category').value = category || '';
+    document.getElementById('edit_quantite').value = quantity || '';
+    
     // Show the modal
     document.getElementById('editModal').style.display = 'block';
 }
 
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
 
     
 
