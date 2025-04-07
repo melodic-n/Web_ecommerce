@@ -85,7 +85,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
 
 // Authentication Routes (already included by Breeze/Fortify)
 require __DIR__.'/auth.php';
-
+Route::get('/produits', [ProduitController::class, 'index'])->name('produits');
 // Specific Routes that were outside the groups
 Route::get('/acceuilHandies', function () {
     return view('customer.acceuilHandies');

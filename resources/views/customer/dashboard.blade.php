@@ -10,26 +10,32 @@
 <body>
     <header>
         <div class="logo">
-            <img src="images/customer/logo_handies.png" alt="Logo">
+            <img src="{{ asset('images/customer/logo_handies.png') }}" alt="Logo">
         </div>
         <nav>
-    <ul>
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
-        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
-        <li><a href="{{ route('about') }}">About Us</a></li>
-        <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
-    </ul>
-</nav>
+            <ul>
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+                <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+                <li><a href="{{ route('about') }}">About Us</a></li>
+                <li><a href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            </ul>
+        </nav>
+
         <div class="search-bar">
             <input type="text" id="searchBar" placeholder="Recherchez un produit..." onkeyup="filterProducts()">
             <button class="search-icon"><i class="fas fa-search"></i></button>
         </div>
+
         <div class="icons">
             <a href="javascript:void(0)" class="cart-icon" onclick="toggleCart()">
-                <i class="fas fa-shopping-cart"></i> 
-            </a>            
-            <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
         </div>
 
         <div id="cart-container" class="cart-container" style="display: none;">
@@ -37,13 +43,13 @@
             <div id="cart-items"></div>
             <div id="total-price" style="font-weight: bold;">Total: 0 MAD</div>
             <button onclick="closeCart()">Fermer</button>
-
         </div>
     </header>
 
     <main>
     <div class="products"></div> 
     </main>
+
     <footer>
         <div class="footer-container">
             <div class="footer-section about">
@@ -70,7 +76,7 @@
     </footer>
     <script>
         var userId = {{ auth()->user()->id }};  
-        var orderRoute = "/commande";
+        var orderRoute = "/customer/commande/" + userId;
     </script>
     
     
@@ -133,4 +139,3 @@
 
 </body>
 </html>
-

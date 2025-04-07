@@ -11,17 +11,7 @@ class ProduitController extends Controller
     public function index()
     {
         $produits = Produit::all();
-        return view('dashboard', compact('produits'));
-    }
-
-    public function getImage($id)
-    {
-        $produit = Produit::findOrFail($id);
-    
-        $imageData = $produit->img_prod;
-    
-        return response($imageData)
-            ->header('Content-Type', 'image/jpeg');
+        return view('customer.produits', compact('produits'));
     }
     
     public function show($id)
