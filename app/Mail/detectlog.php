@@ -11,14 +11,22 @@ use Illuminate\Queue\SerializesModels;
 
 class detectlog extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
+    public $user;
+
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
+    }
+
+    public function build()
+    {
+        return $this->subject('Login Notification')
+                    ->view('login_notification')
+                    ->with([
+                        'user' => $this->user,
+                    ]);
     }
 
     /**
@@ -37,8 +45,9 @@ class detectlog extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'login_notification',
         );
+        
     }
 
     /**
