@@ -9,10 +9,10 @@
         <div class="section panier-resume">
             <h3>Votre panier</h3>
             <div id="commande-items">
-                <!-- Les articles seront chargés dynamiquement ici -->
+                <!-- Articles dynamically loaded here -->
             </div>
             <div class="commande-total">
-                <strong>Total: <span id="commande-total-price">0 MAD</span></strong>
+            <strong>Total: <span id="commande-total-price">{{ $totalAmount }} MAD</span></strong>
             </div>
         </div>
 
@@ -23,48 +23,41 @@
                 @csrf
                 <div class="form-group">
                     <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ Auth::check() ? Auth::user()->nom : '' }}" required>
+                    <input type="text" id="nom" name="nom" value="{{ $customer ? $customer->nom : '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ Auth::check() ? Auth::user()->prenom : '' }}" required>
+                    <input type="text" id="prenom" name="prenom" value="{{ $customer ? $customer->prenom : '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ Auth::check() ? Auth::user()->email : '' }}" required>
+                    <input type="email" id="email" name="email" value="{{ $user->email }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="tel">Téléphone</label>
-                    <input type="tel" id="tel" name="tel" value="{{ Auth::check() ? Auth::user()->tel : '' }}" required>
+                    <input type="tel" id="tel" name="tel" value="{{ $customer ? $customer->tel : '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="adresse">Adresse de livraison</label>
-                    <textarea id="adresse" name="adresse" required>{{ Auth::check() ? Auth::user()->adresse : '' }}</textarea>
+                    <textarea id="adresse" name="adresse" required>{{ $customer ? $customer->adresse : '' }}</textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="ville">Ville</label>
-                    <input type="text" id="ville" name="ville" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="code_postal">Code postal</label>
-                    <input type="text" id="code_postal" name="code_postal" required>
-                </div>
+               <!-- Hidden fields for cart data -->
+<input type="hidden" name="cart_data" id="cart-data">
+<input type="hidden" name="total_amount" id="total-amount">
+<input type="hidden" name="payment_method" value="paypal">
+<input type="hidden" name="panier_id" value="{{ isset($panier) ? $panier->id : '' }}">
 
-                <!-- Hidden fields for cart data -->
-                <input type="hidden" name="cart_data" id="cart-data">
-                <input type="hidden" name="total_amount" id="total-amount">
-                <input type="hidden" name="payment_method" value="livraison">
             </form>
         </div>
 
         <!-- Mode de paiement -->
-        <div class="section mode-paiement">
+        <!-- <div class="section mode-paiement">
             <h3>Mode de paiement</h3>
             <div class="payment-options">
                 <div class="payment-option">
@@ -72,228 +65,35 @@
                     <label for="paiement-livraison">Paiement à la livraison</label>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="commande-actions">
-            <button type="button" id="confirmer-commande" class="btn-primary">Confirmer la commande</button>
-            <a href="{{ route('home') }}" class="btn-secondary">Continuer mes achats</a>
+            <button type="button" id="confirmer-commande" class="btn-primary">Confirmer la commande</button> <!-- recu -->
+            <a href="{{ route('customer.dashboard') }}" class="btn-secondary">Continuer mes achats</a>
         </div>
     </div>
 </div>
-<style>
-    .commande-container {
-        max-width: 1200px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
 
-    h2 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .commande-sections {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .section {
-        background-color: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    h3 {
-        color: #444;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-row {
-        display: flex;
-        gap: 15px;
-    }
-
-    .half {
-        flex: 1;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        color: #555;
-    }
-
-    input, textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 16px;
-    }
-
-    textarea {
-        height: 80px;
-    }
-
-    .payment-options {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .payment-option {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .payment-option input[type="radio"] {
-        width: auto;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    .commande-item {
-        display: flex;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .commande-item img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-right: 15px;
-    }
-
-    .commande-total {
-        margin-top: 20px;
-        text-align: right;
-        font-size: 18px;
-    }
-
-    .commande-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 30px;
-    }
-
-    .btn-primary {
-        background-color: #F4C4B0;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-        transition: background-color 0.3s;
-    }
-
-    .btn-primary:hover {
-        background-color: #e4a98a;
-    }
-
-    .btn-secondary {
-        background-color: white;
-        color: #555;
-        border: 1px solid #ddd;
-        padding: 12px 25px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-
-    .btn-secondary:hover {
-        background-color: #f5f5f5;
-    }
-
-    @media (min-width: 768px) {
-        .commande-sections {
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .panier-resume, .livraison-info {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .mode-paiement, .commande-actions {
-            width: 100%;
-        }
-    }
-</style>
 @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
 @endif
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const commandeItems = document.getElementById('commande-items');
-    const totalPriceElement = document.getElementById('commande-total-price');
-    const cartDataInput = document.getElementById('cart-data');
-    const totalAmountInput = document.getElementById('total-amount');
-    
-    if (cart.length > 0) {
-        let totalPrice = 0;
-        cart.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.classList.add('commande-item');
-            
-            // Ensure that product.price is a valid number and quantity is not undefined or zero
-            const price = parseFloat(product.price.replace(' MAD', '').replace(' ', ''));
-            const quantity = product.quantity || 1;  // Default to 1 if quantity is undefined
-
-            if (!isNaN(price) && quantity > 0) {
-                totalPrice += price * quantity;
-            } else {
-                console.warn(`Invalid price or quantity for product: ${product.name}`);
-            }
-
-            productElement.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div>
-                    <div><strong>${product.name}</strong></div>
-                    <div>${product.price} x ${quantity}</div>
-                </div>
-            `;
-            commandeItems.appendChild(productElement);
-        });
-        
-        // Ensure total price is a valid number
-        totalPrice = isNaN(totalPrice) ? 0 : totalPrice;
-        
-        totalPriceElement.textContent = `${totalPrice.toFixed(2)} MAD`;
-        cartDataInput.value = JSON.stringify(cart);
-        totalAmountInput.value = totalPrice.toFixed(2); // Set the total amount to the input
-    } else {
-        commandeItems.innerHTML = '<p>Votre panier est vide</p>';
-    }
-    
+<script>document.addEventListener('DOMContentLoaded', function() {
     const confirmerCommande = document.getElementById('confirmer-commande');
     const commandeForm = document.getElementById('commande-form');
-    
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
     confirmerCommande.addEventListener('click', function() {
-        const required = commandeForm.querySelectorAll('[required]');
-        let isValid = true;
+    document.getElementById('cart-data').value = JSON.stringify(cart);
+
+    let totalAmount = cart.reduce((sum, item) => sum + parseFloat(item.price.replace(' MAD', '').trim()), 0);
+    document.getElementById('total-amount').value = totalAmount.toFixed(2);
+        
+    const required = commandeForm.querySelectorAll('[required]');
+    let isValid = true;
         
         required.forEach(field => {
             if (!field.value.trim()) {
@@ -305,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (isValid) {
-            // Submit the form
             commandeForm.submit();
         } else {
             alert('Veuillez remplir tous les champs obligatoires.');
@@ -313,6 +112,135 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 </script>
+
+
 @endsection
+
+<style>
+    /* Commande Container */
+    .commande-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 28px;
+    }
+
+    .commande-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* Section Style */
+    .section {
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h3 {
+        color: #444;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+        color: #555;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .commande-total {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 18px;
+    }
+
+    .commande-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        padding: 10px 20px;
+        background-color: #f8f9fa;
+        color: #007bff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #e2e6ea;
+    }
+
+    .payment-options {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-option {
+        margin-bottom: 10px;
+    }
+
+    .payment-option input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    .alert-success {
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 4px;
+    }
+</style>

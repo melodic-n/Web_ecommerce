@@ -74,16 +74,21 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::patch('/products/{produit}', [ProduitController::class, 'update'])->name('admin.products.update');
     Route::delete('/products/{produit}', [ProduitController::class, 'destroy'])->name('admin.products.destroy');
 });
-
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
+    // Dashboard route
     Route::get('/', [CustomerController::class, 'index'])->name('customer.dashboard');
+
+    // Cart routes
     Route::post('/panier', [PanierController::class, 'store']);
     Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']);
     Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
     Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']);
-    Route::get('/commande/{id}', [CommandeController::class, 'index']);
-    Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');
     Route::get('/paniers', [PanierController::class, 'show']);
+
+    // Order routes
+    Route::get('/commande', [CommandeController::class, 'index'])->name('customer.commande');  // Show cart or order view
+    Route::get('/commande/reciept/{id}', [CommandeController::class, 'show'])->name('customer.commande.show');  // Show specific order details
+    Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');  // Create a new order // Create a new order
 });
 
 // Authentication Routes (already included by Breeze/Fortify)

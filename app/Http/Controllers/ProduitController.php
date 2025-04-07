@@ -28,24 +28,32 @@ class ProduitController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request data
         $validated = $request->validate([
             'nom_prod' => 'required|string|max:255',
             'prix' => 'required|numeric|min:0',
             'description' => 'required|string',
             'category' => 'required|string',
             'quantite' => 'required|integer|min:0',
-            'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // image validation
         ]);
-
+    
+        // Check if an image was uploaded
         if ($request->hasFile('img_prod')) {
-            $imagePath = $request->file('img_prod')->store('products', 'public');
-            $validated['img_prod'] = $imagePath;
+            // Store the image in 'storage/app/public/products' and return the relative file path
+            $imagePath = $request->file('img_prod')->store('products', 'public'); // 'public' is the disk defined in config/filesystems.php
+            
+            // Store the relative path to the database (excluding 'storage/' prefix)
+            $validated['img_prod'] = 'storage/' . $imagePath;  // Make sure the path starts with 'storage/'
         }
-
+    
+        // Create the product record with validated data, including image path if it exists
         Produit::create($validated);
+    
+        // Redirect back with a success message
         return redirect()->back()->with('success', 'Product added!');
     }
-
+    
     public function edit($id)
     {
         $produit = Produit::findOrFail($id);

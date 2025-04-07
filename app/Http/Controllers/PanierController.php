@@ -19,66 +19,74 @@ class PanierController extends Controller
     {
         $user = Auth::user();
         $panier = Panier::with('produits')->where('user_id', $user->id)->first();
-
+    
         if (!$panier) {
             return response()->json(['message' => 'Aucun panier trouvé'], 404);
         }
-
+    
+        Log::info('Panier details', ['panier' => $panier]);
+    
         return response()->json($panier);
     }
+    
 
     public function store(Request $request)
     {
         Log::info('Panier store request received', ['data' => $request->all()]);
-
+    
         try {
             $user = Auth::user();
-
-            // ✅ Validate request
+    
+            // Validate request - expecting an array of products
             $validatedData = $request->validate([
                 'produits' => 'required|array',
                 'produits.*.id' => 'required|exists:produits,id',
                 'produits.*.quantite' => 'required|integer|min:1',
             ]);
-
+    
             Log::info('Validation passed', ['validatedData' => $validatedData]);
-
-            // ✅ Calculate total price
+    
+            // Calculate the total price of the cart
             $totalPrice = 0;
             foreach ($request->produits as $produit) {
                 $produitData = Produit::find($produit['id']);
                 $totalPrice += $produitData->prix * $produit['quantite'];
             }
+    
             Log::info("Total price calculated", ['totalPrice' => $totalPrice]);
-
-            // ✅ Check if the user already has a panier
+    
+            // Check if the user already has a panier
             $panier = Panier::firstOrCreate(
                 ['user_id' => $user->id],
                 ['prix_total' => $totalPrice]
             );
-
-            // ✅ Attach products to panier
+    
+            // Attach the products to the panier
             foreach ($request->produits as $produit) {
                 $panier->produits()->syncWithoutDetaching([
                     $produit['id'] => ['quantite' => $produit['quantite']]
                 ]);
             }
-
+    
+            // Update the total price after adding products
             $this->updatePrixTotal($panier);
-
+    
             return response()->json([
                 'message' => 'Panier mis à jour avec succès',
                 'panier' => $panier->load('produits')
             ], 201);
+    
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création du panier : ' . $e->getMessage());
+    
             return response()->json([
                 'error' => 'Erreur lors de la création du panier.',
                 'details' => $e->getMessage()
             ], 500);
         }
     }
-
+    
+    
     public function ajouterArticle(Request $request)
     {
         Log::info('Ajouter article request received', ['data' => $request->all()]);

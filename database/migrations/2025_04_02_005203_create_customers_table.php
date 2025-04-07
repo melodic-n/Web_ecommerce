@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('tel');
             $table->text('adresse');
-            // $table->foreignId('panter_id')->nullable()->constrained('panters');
             $table->timestamps();
         });
     }

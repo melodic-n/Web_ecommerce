@@ -49,21 +49,22 @@
     <main>
         <div class="products">
             @foreach($produits as $produit)
-            <div class="rectangle" data-name="{{ $produit->nom }}">
-                <div class="image-container" style="background-image: url('{{ $produit->img_prod }}');"></div>
-                <div class="info-container">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
-                    </div>
-                    <div class="product-name">{{ $produit->nom_prod }}</div>
-                    <div class="product-price">{{ $produit->prix }} MAD</div>
-                    <div class="product-description">{{ $produit->description }}</div>
-                </div>
-            </div>
+            <div class="rectangle" data-id="{{ $produit->id }}" data-name="{{ $produit->nom_prod }}">
+            <div class="image-container" style="background-image: url('http://127.0.0.1:8000/storage/products/4PH1DY0I1QmjRlxoGaYpM8xoxrc9O5nP35Pvu3LX.jpg');"></div>
+            <div class="product-rating">
+                
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
+        </div>
+        <div class="product-name">{{ $produit->nom_prod }}</div>
+        <div class="product-price">{{ $produit->prix }} MAD</div>
+        <div class="product-description">{{ $produit->description }}</div>
+    </div>
+</div>
+
             @endforeach
         </div>
     </main>
@@ -155,7 +156,8 @@
 
 
 <script>
-    var userId = {{ auth()->user()->id }};  
+    var userId = {{ auth()->user()->id }};
+    console.log(userId)  ;
     var orderRoute = "/customer/commande/" + userId;
 </script>
 

@@ -31,7 +31,6 @@ class EventServiceProvider extends ServiceProvider
 
         // Listen for successful login event
         Event::listen(Login::class, function ($event) {
-            // Send the login notification email to the logged-in user
             Mail::to($event->user->email)->send(new detectlog($event->user));
         });
     }
