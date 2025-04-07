@@ -101,21 +101,3 @@ Route::get('/user/register', function () {
 })->name('customer.user');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
-// Redundant route - already handled within the admin group
-// Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
-// Route::put('/produits/{id}', [ProduitController::class, 'update']);
-// Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
-// Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');
-// Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');
-// Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('produits.show');
-// Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
-// Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
-// Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
-
-// Redundant route - already handled within the admin group
-// Route::get('produits/{id}/edit', [ProduitController::class, 'edit']);
-
-// Redundant logout routes - already handled by auth.php
-// Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
-//     ->middleware('auth')
-//     ->name('logout');
