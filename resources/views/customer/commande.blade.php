@@ -19,7 +19,8 @@
         <!-- Informations de livraison -->
         <div class="section livraison-info">
             <h3>Informations de livraison</h3>
-            <form id="commande-form">
+            <form id="commande-form" action="{{ route('commande.store') }}" method="POST">
+                @csrf
                 <div class="form-group">
                     <label for="nom">Nom</label>
                     <input type="text" id="nom" name="nom" value="{{ Auth::check() ? Auth::user()->nom : '' }}" required>
@@ -54,6 +55,11 @@
                     <label for="code_postal">Code postal</label>
                     <input type="text" id="code_postal" name="code_postal" required>
                 </div>
+
+                <!-- Hidden fields for cart data -->
+                <input type="hidden" name="cart_data" id="cart-data">
+                <input type="hidden" name="total_amount" id="total-amount">
+                <input type="hidden" name="payment_method" value="livraison">
             </form>
         </div>
 
@@ -74,7 +80,6 @@
         </div>
     </div>
 </div>
-
 <style>
     .commande-container {
         max-width: 1200px;
@@ -233,46 +238,63 @@
         }
     }
 </style>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const commandeItems = document.getElementById('commande-items');
     const totalPriceElement = document.getElementById('commande-total-price');
+    const cartDataInput = document.getElementById('cart-data');
+    const totalAmountInput = document.getElementById('total-amount');
     
     if (cart.length > 0) {
         let totalPrice = 0;
         cart.forEach(product => {
             const productElement = document.createElement('div');
             productElement.classList.add('commande-item');
-            const price = parseFloat(product.price.replace(' MAD', '').replace(' ', ''));
-            totalPrice += price;
             
-            // Changed from product.img_prod to product.image
+            // Ensure that product.price is a valid number and quantity is not undefined or zero
+            const price = parseFloat(product.price.replace(' MAD', '').replace(' ', ''));
+            const quantity = product.quantity || 1;  // Default to 1 if quantity is undefined
+
+            if (!isNaN(price) && quantity > 0) {
+                totalPrice += price * quantity;
+            } else {
+                console.warn(`Invalid price or quantity for product: ${product.name}`);
+            }
+
             productElement.innerHTML = `
                 <img src="${product.image}" alt="${product.name}">
                 <div>
                     <div><strong>${product.name}</strong></div>
-                    <div>${product.price}</div>
+                    <div>${product.price} x ${quantity}</div>
                 </div>
             `;
             commandeItems.appendChild(productElement);
         });
+        
+        // Ensure total price is a valid number
+        totalPrice = isNaN(totalPrice) ? 0 : totalPrice;
+        
         totalPriceElement.textContent = `${totalPrice.toFixed(2)} MAD`;
+        cartDataInput.value = JSON.stringify(cart);
+        totalAmountInput.value = totalPrice.toFixed(2); // Set the total amount to the input
     } else {
         commandeItems.innerHTML = '<p>Votre panier est vide</p>';
     }
     
-    const paiementLivraison = document.getElementById('paiement-livraison');
-    paiementLivraison.addEventListener('change', function() {
-        // Only handle paiement-livraison logic since carte is removed
-    });
-    
     const confirmerCommande = document.getElementById('confirmer-commande');
     const commandeForm = document.getElementById('commande-form');
+    
     confirmerCommande.addEventListener('click', function() {
         const required = commandeForm.querySelectorAll('[required]');
         let isValid = true;
+        
         required.forEach(field => {
             if (!field.value.trim()) {
                 isValid = false;
@@ -283,15 +305,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (isValid) {
-            alert('Votre commande a été confirmée! ');
-            localStorage.removeItem('cart');
-            setTimeout(() => {
-                window.location.href = "{{ route('home') }}";
-            }, 2000);
+            // Submit the form
+            commandeForm.submit();
         } else {
             alert('Veuillez remplir tous les champs obligatoires.');
         }
     });
 });
+
+
 </script>
 @endsection

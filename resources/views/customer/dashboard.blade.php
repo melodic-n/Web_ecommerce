@@ -154,6 +154,10 @@
 <script src="{{ asset('js/customer/produits.js') }}"></script>
 
 
+<script>
+    var userId = {{ auth()->user()->id }};  
+    var orderRoute = "/customer/commande/" + userId;
+</script>
 
 </body>
 </html>

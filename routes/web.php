@@ -80,7 +80,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
     Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
     Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']);
     Route::get('/commande/{id}', [CommandeController::class, 'index']);
-    Route::post('/commandes/create', [CommandeController::class, 'createOrder']);
+    Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');
     Route::get('/paniers', [PanierController::class, 'show']);
 });
 

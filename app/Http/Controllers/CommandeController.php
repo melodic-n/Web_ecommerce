@@ -14,36 +14,40 @@ class CommandeController extends Controller
     {
         $this->middleware('auth'); // Ensure user is authenticated
     }
-
-    public function createOrder(Request $request)
+    public function store(Request $request)
     {
-        $user = auth()->user(); // Get the authenticated user
+        $request->validate([
+            'nom' => 'required',
+            'prenom' => 'required',
+            'email' => 'required|email',
+            'tel' => 'required',
+            'adresse' => 'required',
+            'ville' => 'required',
+            'code_postal' => 'required',
+        ]);
     
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non authentifié'], 401);
-        }
-    
-        $panier = Panier::where('user_id', $user->id)->first();
-    
-        if (!$panier) {
-            return response()->json(['message' => 'Panier non trouvé pour cet utilisateur'], 404);
-        }
-    
-        $commande = new Commande([
-            'user_id' => $user->id,
+        // Create the order
+        $commande = Commande::create([
+            'user_id' => Auth::id(),
             'status' => 'pending',
-            'montant' => $panier->prix_total,
-            'panier_id' => $panier->id,
+            'montant' => $request->total_amount,
+            'livraison_info' => json_encode([
+                'nom' => $request->nom,
+                'prenom' => $request->prenom,
+                'email' => $request->email,
+                'tel' => $request->tel,
+                'adresse' => $request->adresse,
+                'ville' => $request->ville,
+                'code_postal' => $request->code_postal,
+            ]),
+            'payment_method' => $request->payment_method,
+            'cart_data' => $request->cart_data,
         ]);
     
-        $commande->save();
-    
-        return response()->json([
-            'message' => 'Commande créée avec succès',
-            'commande' => $commande
-        ]);
-        
+        // Return response
+        return redirect()->route('home')->with('success', 'Commande passée avec succès!');
     }
+    
     
     public function index()
 {

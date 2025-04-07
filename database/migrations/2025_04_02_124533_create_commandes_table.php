@@ -11,9 +11,11 @@ return new class extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('status'); // Fixed: lowercase "string"
+            $table->string('status'); 
             $table->float('montant');
-            $table->foreignId('panier_id')->constrained('paniers')->onDelete('cascade'); // Explicit table name
+            $table->string('livraison_info'); 
+            $table->string('payment_method'); 
+            $table->text('cart_data')->nullable();
             $table->timestamps();
         });
     }

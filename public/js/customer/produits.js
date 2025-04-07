@@ -113,8 +113,7 @@ function closeCart() {
 }
 
 function passerCommande() {
-    // Replace this with the actual checkout route
-    window.location.href = '/checkout';
+    window.location.href = orderRoute;
 }
 
 // Filter products functionality

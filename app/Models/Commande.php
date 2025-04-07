@@ -15,7 +15,8 @@ class Commande extends Model
         'user_id',
         'status',
         'montant',
-        'panier_id', 
+        'livraison_info',
+        'payment_method',
         ];
 
     public function panier()
