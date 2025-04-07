@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
-  <style>
+<style>
     /* General Styles */
     body {
         font-family: Arial, sans-serif;
@@ -767,7 +767,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <td class="action-buttons">
         <!-- Edit Button -->
-        <button class="btn btn-primary" onclick="openEditModal({{ $produit->id }}, '{{ $produit->nom_prod }}', {{ $produit->prix }}, '{{ $produit->description }}')">Edit</button>
+        <button class="btn btn-primary" 
+        onclick="openEditModal({{ $produit->id }}, '{{ $produit->nom_prod }}', {{ $produit->prix }}, '{{ $produit->description }}', '{{ $produit->category }}', {{ $produit->quantite }})">
+    Edit
+</button>
+
         <div class="modal" id="editModal" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -777,7 +781,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <form id="editProductForm" action="{{ route('admin.products.update', $produit->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @method('PATCH') <!-- This is needed to simulate a PATCH request -->
+    @method('PATCH') 
 
     <div class="modal-body">
         <div class="form-group">
@@ -841,23 +845,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('editProductForm');
     form.action = '/admin/products/' + id;
 
-    // Get the current values in the fields before setting new ones
-    const currentName = document.getElementById('nom_prod').value;
-    const currentPrice = document.getElementById('prix').value;
-    const currentDescription = document.getElementById('description').value;
-    const currentCategory = document.getElementById('category').value;
-    const currentQuantity = document.getElementById('quantite').value;
-
-    // Set new values or retain the previous ones if no new values are provided
-    document.getElementById('nom_prod').value = name || currentName;
-    document.getElementById('prix').value = price || currentPrice;
-    document.getElementById('description').value = description || currentDescription;
-    document.getElementById('category').value = category || currentCategory;
-    document.getElementById('quantite').value = quantity || currentQuantity;
+    // Set the values for the modal fields
+    document.getElementById('nom_prod').value = name || '';
+    document.getElementById('prix').value = price || '';
+    document.getElementById('description').value = description || '';
+    document.getElementById('category').value = category || '';
+    document.getElementById('quantite').value = quantity || '';
 
     // Show the modal
     document.getElementById('editModal').style.display = 'block';
 }
+
 
     
 
@@ -867,42 +865,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('editModal').style.display = 'none';
     }
 
-// // Edit Product
-// function loadProductToForm(productId) {
-//     // Fetch product data from the server
-//     fetch(`/produits/${productId}/edit`)
-//         .then(response => response.json())
-//         .then(product => {
-//             // Fill the form fields with the fetched product data
-//             document.getElementById('nom_prod').value = product.nom_prod;
-//             document.getElementById('prix').value = product.prix;
-//             document.getElementById('description').value = product.description;
-//             document.getElementById('category').value = product.category;
-//             document.getElementById('quantite').value = product.quantite;
-            
-//             // Set the form action to update the product (PATCH/PUT)
-//             const form = document.getElementById('addProductForm');
-//             form.action = `/produits/${productId}`;
-            
-//             // Add or ensure _method field for PUT (for updating the product)
-//             let methodInput = form.querySelector('input[name="_method"]');
-//             if (!methodInput) {
-//                 methodInput = document.createElement('input');
-//                 methodInput.type = 'hidden';
-//                 methodInput.name = '_method';
-//                 methodInput.value = 'PUT';
-//                 form.appendChild(methodInput);
-//             }
-            
-//             // Change the button text to 'Update Product'
-//             const submitButton = form.querySelector('button[type="submit"]');
-//             submitButton.textContent = 'Update Product';
-//         })
-//         .catch(error => {
-//             console.error('Failed to load product data:', error);
-//             alert('Failed to load product data for editing.');
-//         });
-// }
+// Function to open the edit modal and fill the fields with the correct data
+
+
+// Function to close the modal
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
 
 // Add event listener to all edit buttons dynamically
 document.addEventListener('DOMContentLoaded', () => {
@@ -1001,50 +970,18 @@ function resetProductForm() {
     </main>
   </div>
   <script>
-    // Mock API using Local Storage
     const PRODUCTS_KEY = "products";
     const ORDERS_KEY = "orders";
     const CUSTOMERS_KEY = "customers";
     const ADMINS_KEY = "admins";
-    // In your section toggle code
 const sections = {
     dashboardLink: "dashboardSection",
     productsLink: "productsSection",
-    customersLink: "customersSection", // Add this
+    customersLink: "customersSection", 
     ordersLink: "ordersSection"
 };
 
-    // // Function to fetch data from local storage
-    // function getData(key) {
-    //   const data = localStorage.getItem(key);
-    //   return data ? JSON.parse(data) : [];
-    // }
 
-    // // Function to save data to local storage
-    // function saveData(key, data) {
-    //   localStorage.setItem(key, JSON.stringify(data));
-    // }
-
-    // // Function to render products in the table
-    // function renderProducts() {
-    //   const products = getData(PRODUCTS_KEY);
-    //   const tableBody = document.querySelector("#productTable tbody");
-    //   tableBody.innerHTML = "";
-
-    //   products.forEach((product, index) => {
-    //     const row = document.createElement("tr");
-    //     row.innerHTML = `
-    //       <td>${product.name}</td>
-    //       <td>$${product.price}</td>
-    //       <td>${product.description}</td>
-    //       <td class="action-buttons">
-    //         <button class="edit" onclick="editProduct(${index})">Edit</button>
-    //         <button class="delete" onclick="deleteProduct(${index})">Delete</button>
-    //       </td>
-    //     `;
-    //     tableBody.appendChild(row);
-    //   });
-    // }
 
     // Function to render orders in the table
     function renderOrders() {
@@ -1088,80 +1025,7 @@ const sections = {
       });
     }
 
-    // // Add Product
-    // document.getElementById("addProductForm").addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   const product = {
-    //     name: document.getElementById("productName").value,
-    //     price: parseFloat(document.getElementById("productPrice").value),
-    //     description: document.getElementById("productDescription").value,
-    //   };
-    //   const products = getData(PRODUCTS_KEY);
-    //   products.push(product);
-    //   saveData(PRODUCTS_KEY, products);
-    //   renderProducts();
-    //   document.getElementById("addProductForm").reset();
-    // });
-
-    // // Add Order
-    // document.getElementById("addOrderForm").addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   const order = {
-    //     orderId: document.getElementById("orderId").value,
-    //     customerName: document.getElementById("customerName").value,
-    //     orderTotal: parseFloat(document.getElementById("orderTotal").value),
-    //   };
-    //   const orders = getData(ORDERS_KEY);
-    //   orders.push(order);
-    //   saveData(ORDERS_KEY, orders);
-    //   renderOrders();
-    //   document.getElementById("addOrderForm").reset();
-    // });
-
-    // // Add Customer
-    // document.getElementById("addCustomerForm").addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   const customer = {
-    //     name: document.getElementById("customerName").value,
-    //     email: document.getElementById("customerEmail").value,
-    //     phone: document.getElementById("customerPhone").value,
-    //   };
-    //   const customers = getData(CUSTOMERS_KEY);
-    //   customers.push(customer);
-    //   saveData(CUSTOMERS_KEY, customers);
-    //   renderCustomers();
-    //   document.getElementById("addCustomerForm").reset();
-    // });
-
-    // // Add Admin
-    // document.getElementById("addAdminForm").addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   const admin = {
-    //     name: document.getElementById("adminName").value,
-    //     address: document.getElementById("adminAddress").value,
-    //     email: document.getElementById("adminEmail").value,
-    //     password: document.getElementById("adminPassword").value,
-    //   };
-    //   const admins = getData(ADMINS_KEY);
-    //   admins.push(admin);
-    //   saveData(ADMINS_KEY, admins);
-    //   alert("New admin added successfully!");
-    //   document.getElementById("addAdminForm").reset();
-    //   document.getElementById("adminForm").classList.add("hidden");
-    // });
-
-    // // Edit Product
-    // function editProduct(index) {
-    //   const products = getData(PRODUCTS_KEY);
-    //   const product = products[index];
-    //   document.getElementById("productName").value = product.name;
-    //   document.getElementById("productPrice").value = product.price;
-    //   document.getElementById("productDescription").value = product.description;
-    //   products.splice(index, 1);
-    //   saveData(PRODUCTS_KEY, products);
-    //   renderProducts();
-    // }
-
+  
     // Delete Product
     function deleteProduct(index) {
       const products = getData(PRODUCTS_KEY);
