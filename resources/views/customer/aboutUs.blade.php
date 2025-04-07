@@ -105,7 +105,7 @@
             </div>
         </div>
         <div class="product-item">
-            <img src="images/customer/produit12.jpg" alt="Produit 2">
+            <img src="images/customer/Produit12.jpg" alt="Produit 2">
             <div class="product-description">
                 <h3>Produit 2</h3>
                 <p>Un autre produit artisanal d'exception, façonné par nos artisans locaux. Parfait pour ajouter une touche traditionnelle à votre intérieur.</p>

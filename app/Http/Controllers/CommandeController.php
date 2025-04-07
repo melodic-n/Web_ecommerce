@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommandeController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware('auth'); // Ensure user is authenticated
@@ -50,6 +51,7 @@ class CommandeController extends Controller
         $commandes = Commande::with(['user', 'panier'])->get();
         return view('admin.dashboard', compact('commandes')); // Will merge with other data
     }
-   
+    return view('customer.commande');
+
 }
 }

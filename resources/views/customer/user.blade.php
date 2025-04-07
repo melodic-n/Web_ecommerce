@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="left-image">
-        <img src="{{ asset('images/handies_loginImage.png') }}" alt="Image de login">
+        <img src="{{ asset('images/logo_handies.png') }}" alt="Image de login">
     </div>
     <header>
         <div class="logo">

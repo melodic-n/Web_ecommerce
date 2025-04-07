@@ -115,7 +115,29 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 // Redundant route - already handled within the admin group
 // Route::get('produits/{id}/edit', [ProduitController::class, 'edit']);
 
+<<<<<<< HEAD
 // Redundant logout routes - already handled by auth.php
 // Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
 //     ->middleware('auth')
 //     ->name('logout');
+=======
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+Route::get('/commande', [CommandeController::class, 'index'])->name('commande');
+
+require __DIR__.'/auth.php';
+
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout')
+    ->middleware('auth');
+
+
+
+Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
+>>>>>>> 419e9074bac65eca6b7ad114bc5545e8f53868e5

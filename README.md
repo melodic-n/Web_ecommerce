@@ -1,66 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+![Handies Logo](public/images/logo_handies.png)
+# Handies - Artisanat Marocain Traditionnel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Handies est bien plus qu'une simple plateforme de vente en ligne. Nous sommes une équipe passionnée dédiée à la préservation et à la valorisation de l'artisanat marocain traditionnel. En collaborant étroitement avec des artisans locaux issus des différentes régions du Maroc, nous avons pour mission de faire découvrir au monde entier la richesse et la diversité des produits artisanaux marocains.
 
-## About Laravel
+Nos produits sont fabriqués à la main, chacun avec une attention méticuleuse aux détails et une profonde connaissance des techniques ancestrales. De la poterie des montagnes de l'Atlas aux tissus brodés à la main dans les villes impériales, chaque article que nous proposons est une œuvre d'art qui raconte une histoire. Nous croyons fermement que l'artisanat marocain n'est pas seulement un produit, mais un héritage vivant qui mérite d'être soutenu et transmis de génération en génération.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Équipe
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Notre équipe est composée de trois membres passionnés qui contribuent à la croissance et au succès de Handies.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Hajar - Développeuse Full Stack
 
-## Learning Laravel
+- Responsable du développement du site web et de la base de données.
+- S'occupe de la liaison entre le Back-End et le Front-End.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Salma - UI/UX Designer & Front-End Developer
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Chargée de l'expérience utilisateur et du design visuel du site.
+- Responsable de la gestion des tâches liées au développement Front-End.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Hafssa - Responsable Contenu & Back-End Developer
 
-## Laravel Sponsors
+- Gère la création et la gestion du contenu du site ainsi que la logique serveur.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Fonctionnalités
 
-### Premium Partners
+- Affichage des produits avec image, description, et prix.
+- Ajout des produits au panier.
+- Suppression des produits du panier.
+- Calcul dynamique du total du panier.
+- Option pour passer commande.
+- Interface utilisateur réactive et facile à utiliser.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Technologies Utilisées
 
-## Contributing
+- **HTML** pour la structure de la page.
+- **CSS** pour la mise en page et la présentation.
+- **JavaScript** pour la logique de gestion du panier.
+- **LocalStorage** pour sauvegarder les produits dans le panier.
+- **Laravel** pour la gestion du back-end.
+- **npm** pour la gestion des dépendances front-end.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instructions d'Installation
 
-## Code of Conduct
+### Pré-requis
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Assurez-vous d'avoir **Node.js** et **npm** installés sur votre machine.
+2. Assurez-vous d'avoir **Composer** installé pour gérer les dépendances Laravel.
 
-## Security Vulnerabilities
+### Installation du projet
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Clonez ce repository sur votre machine locale :
+
+   ```bash
+   git clone https://github.com/melodic-n/Web_ecommerce.git
+   ```
+
+2. Accédez au répertoire du projet :
+
+   ```bash
+   cd Web_ecommerce
+   ```
+
+3. Installez les dépendances Laravel :
+
+   ```bash
+   composer install
+   ```
+
+4. Installez les dépendances front-end avec npm :
+
+   ```bash
+   npm install
+   ```
+
+5. Exécutez les commandes pour compiler les fichiers front-end :
+
+   ```bash
+   npm run dev
+   ```
+
+6. Lancez le serveur Laravel pour tester l'application localement :
+
+   ```bash
+   php artisan serve
+   ```
+
+7. Ouvrez votre navigateur et accédez à `http://localhost:8000` pour voir l'application en action.
+
+## Remerciements
+
+Nous souhaitons remercier tous les contributeurs pour leur travail acharné et leur collaboration. Leur soutien a été essentiel pour améliorer cette application et lui donner forme.
+
+Un remerciement spécial à [Oussama](https://github.com/defaltastra/) pour son soutien précieux et ses contributions au projet.
+
+## Fonctionnement de l'application
+
+- **Affichage des produits** : Les produits sont présentés dans une grille avec des images, des descriptions, des prix et des évaluations.
+- **Ajout au panier** : Les utilisateurs peuvent ajouter des produits au panier en cliquant sur le bouton "Ajouter au panier".
+- **Affichage du panier** : Le panier est visible lorsqu'un utilisateur clique sur l'icône du panier. Il contient la liste des produits ajoutés ainsi que le total du panier.
+- **Suppression du panier** : Les utilisateurs peuvent supprimer des produits individuels de leur panier.
+- **Passer commande** : Une fois le panier prêt, les utilisateurs peuvent cliquer sur le bouton "Passer commande" pour finaliser leur achat.
+
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+

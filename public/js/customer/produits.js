@@ -222,8 +222,9 @@ function filterProducts() {
 }
 
 function passerCommande() {
-    window.location.href = 'page_commande.html'; 
+    window.location.href = orderRoute;
 }
+
 
 window.onload = function() {
     displayProducts(); 
