@@ -48,46 +48,41 @@ class ProduitController extends Controller
 
     public function edit($id)
     {
-        // Find the product by ID or fail if it doesn't exist
         $produit = Produit::findOrFail($id);
     
-        // Return the product as JSON for AJAX (this is important for the JavaScript)
         return response()->json($produit);
     }
     public function update(Request $request, $id)
-{
-    // Validate the incoming request data
-    $request->validate([
-        'nom_prod' => 'required|string|max:255',
-        'prix' => 'required|numeric',
-        'description' => 'required|string',
-        'category' => 'required|string',
-        'quantite' => 'required|integer',
-        'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
-    ]);
+    {
+        $request->validate([
+            'nom_prod' => 'nullable|string|max:255',
+            'prix' => 'nullable|numeric',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string',
+            'quantite' => 'nullable|integer',
+            'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $produit = Produit::findOrFail($id);
 
-    // Find the product by ID
-    $produit = Produit::findOrFail($id);
-
-    // Update the product details
-    $produit->nom_prod = $request->nom_prod;
-    $produit->prix = $request->prix;
-    $produit->description = $request->description;
-    $produit->category = $request->category;
-    $produit->quantite = $request->quantite;
-
-    // Handle the image upload if there is one
-    if ($request->hasFile('img_prod')) {
-        // Store the new image
-        $imagePath = $request->file('img_prod')->store('products', 'public');
-        $produit->img_prod = $imagePath;
-    }
-
-    // Save the updated product
-    $produit->save();
-
-    return redirect()->route('admin.products.index')->with('success', 'Product updated successfully');
-}
+        // Update product fields
+        $produit->nom_prod = $request->nom_prod ?? $produit->nom_prod;
+        $produit->prix = $request->prix ?? $produit->prix;
+        $produit->description = $request->description ?? $produit->description;
+        $produit->category = $request->category ?? $produit->category;
+        $produit->quantite = $request->quantite ?? $produit->quantite;
+    
+        // Handle image upload
+        if ($request->hasFile('img_prod')) {
+            $imagePath = $request->file('img_prod')->store('products', 'public');
+            $produit->img_prod = $imagePath;
+        }
+    
+        $produit->save();
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully');
+        }
+    
 
 
     public function destroy($id)

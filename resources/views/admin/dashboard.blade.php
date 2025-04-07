@@ -281,6 +281,24 @@
         }
 
         
+.modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(218, 218, 218, 0.96); /* Semi-transparent background */
+}
+
+.modal-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+}
 
         /* Sidebar styles - unchanged from your original */
         .sidebar {
@@ -549,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="stats-container">
                 <div class="stat-card">
-                    <div class="stat-value">1,248</div>
+                    <div class="stat-value">1,248</div><!--   change this  -!> -->
                     <div class="stat-label">Total Products</div>
                 </div>
                 <div class="stat-card">
@@ -671,8 +689,10 @@ document.addEventListener('DOMContentLoaded', function() {
               <button type="submit">Save Admin</button>
             </form>
           </div>
-        </div> -->
+        </div> i dont think we need tus ne -->
       </section>
+
+
 
 
 
@@ -683,38 +703,47 @@ document.addEventListener('DOMContentLoaded', function() {
         <h1>Manage Products</h1>
     </header>
     <div class="product-form">
-        <form id="productForm" action="{{ isset($product) ? route('produits.update', $product->id) : route('produits.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @isset($product) @method('PUT') @endisset
-            <div class="form-group">
-                <label>Product Name</label>
-                <input type="text" name="nom_prod" value="{{ $product->nom_prod ?? '' }}" required>
-            </div>
-            <div class="form-group">
-                <label>Price</label>
-                <input type="number" name="prix" step="0.01" value="{{ $product->prix ?? '' }}" required>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" required>{{ $product->description ?? '' }}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Category</label>
-                <input type="text" name="category" value="{{ $product->category ?? '' }}" required>
-            </div>
-            <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" name="quantite" value="{{ $product->quantite ?? '' }}" required>
-            </div>
-            <div class="form-group">
-                <label>Image</label>
-                <input type="file" name="img_prod">
-                @isset($product->img_prod)
-                    <img src="{{ asset('storage/'.$product->img_prod) }}" width="100">
-                @endisset
-            </div>
-            <button type="submit">{{ isset($product) ? 'Update' : 'Add' }} Product</button>
-        </form>
+    <form id="addProductForm"
+      action="{{ route('admin.products.store') }}"
+      method="POST"
+      enctype="multipart/form-data">
+    @csrf
+
+    <div class="form-group">
+        <label for="nom_prod">Product Name</label>
+        <input type="text" class="form-control" id="nom_prod" name="nom_prod" required>
+    </div>
+
+    <div class="form-group">
+        <label for="prix">Price</label>
+        <input type="number" class="form-control" id="prix" name="prix" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" class="form-control" id="category" name="category" required>
+    </div>
+
+    <div class="form-group">
+        <label for="quantite">Quantity</label>
+        <input type="number" class="form-control" id="quantite" name="quantite" required>
+    </div>
+
+    <div class="form-group">
+        <label for="img_prod">Product Image</label>
+        <input type="file" class="form-control" id="img_prod" name="img_prod">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Product</button>
+</form>
+
+
+
     </div>
     <div class="product-list">
         <table>
@@ -730,63 +759,162 @@ document.addEventListener('DOMContentLoaded', function() {
                 </tr>
             </thead>
             <tbody>
-        @foreach($produits as $produit)
-        <tr>
-            <td>{{ $produit->nom_prod }}</td>
-            <td>{{ $produit->prix }}</td>
-            <td>{{ $produit->description }}</td>
-            <td class="action-buttons">
-                <!-- Edit Button -->
-                <button class="edit-btn" 
-                        data-id="{{ $produit->id }}"
-                        data-name="{{ $produit->nom_prod }}"
-                        data-price="{{ $produit->prix }}"
-                        data-description="{{ $produit->description }}">
-                    Edit
-                </button>
+            @foreach($produits as $produit) 
+<tr>
+    <td>{{ $produit->nom_prod }}</td>
+    <td>{{ $produit->prix }}</td>
+    <td>{{ $produit->description }}</td>
 
-                <!-- Delete Form -->
-                <form class="delete-form" method="POST" action="{{ route('produits.destroy', $produit->id) }}">
-                    @csrf @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
+    <td class="action-buttons">
+        <!-- Edit Button -->
+        <button class="btn btn-primary" onclick="openEditModal({{ $produit->id }}, '{{ $produit->nom_prod }}', {{ $produit->prix }}, '{{ $produit->description }}')">Edit</button>
+        <div class="modal" id="editModal" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeEditModal()"></button>
+            </div>
+            <form id="editProductForm" action="{{ route('admin.products.update', $produit->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PATCH') <!-- This is needed to simulate a PATCH request -->
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="nom_prod">Product Name</label>
+            <input type="text" id="nom_prod" name="nom_prod" class="form-control" value="{{ old('nom_prod', $produit->nom_prod) }}" >
+        </div>
+
+        <div class="form-group">
+            <label for="prix">Price</label>
+            <input type="number" id="prix" name="prix" class="form-control" value="{{ old('prix', $produit->prix) }}" >
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" class="form-control">{{ old('description', $produit->description) }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" class="form-control" value="{{ old('category', $produit->category) }}">
+        </div>
+
+        <div class="form-group">
+            <label for="quantite">Quantity</label>
+            <input type="number" id="quantite" name="quantite" class="form-control" value="{{ old('quantite', $produit->quantite) }}">
+        </div>
+
+        <div class="form-group">
+            <label for="img_prod">Product Image</label>
+            <input type="file" id="img_prod" name="img_prod" class="form-control">
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeEditModal()">Close</button>
+        <button type="submit" class="btn btn-success">Update Product</button>
+    </div>
+</form>
+
+        </div>
+    </div>
+</div>
+
+
+        <!-- Delete Form -->
+        <form class="delete-form" method="POST" action="{{ route('admin.products.destroy', $produit->id) }}">
+            @csrf @method('DELETE')
+            <button type="submit">Delete</button>
+        </form>
+    </td>
+</tr>
+@endforeach
+
     </tbody>
         </table>
     </div>
 </section>
+
 <script>
-function loadProductToForm(productId) {
-  // Fetch product data
-  fetch(`/produits/${productId}/edit`)
-    .then(response => response.json())
-    .then(product => {
-      // Fill the form
-      document.getElementById('nom_prod').value = product.nom_prod;
-      document.getElementById('prix').value = product.prix;
-      document.getElementById('description').value = product.description;
-      document.getElementById('category').value = product.category;
-      document.getElementById('quantite').value = product.quantite;
-      
-      // Change form action to update
-      const form = document.getElementById('addProductForm');
-      form.action = `/produits/${productId}`;
-      
-      // Add hidden _method field for PUT
-      if (!form.querySelector('input[name="_method"]')) {
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'PUT';
-        form.appendChild(methodInput);
-      }
-      
-      // Change button text
-      form.querySelector('button[type="submit"]').textContent = 'Update Product';
-    });
+  function openEditModal(id, name, price, description, category, quantity) {
+    const form = document.getElementById('editProductForm');
+    form.action = '/admin/products/' + id;
+
+    // Get the current values in the fields before setting new ones
+    const currentName = document.getElementById('nom_prod').value;
+    const currentPrice = document.getElementById('prix').value;
+    const currentDescription = document.getElementById('description').value;
+    const currentCategory = document.getElementById('category').value;
+    const currentQuantity = document.getElementById('quantite').value;
+
+    // Set new values or retain the previous ones if no new values are provided
+    document.getElementById('nom_prod').value = name || currentName;
+    document.getElementById('prix').value = price || currentPrice;
+    document.getElementById('description').value = description || currentDescription;
+    document.getElementById('category').value = category || currentCategory;
+    document.getElementById('quantite').value = quantity || currentQuantity;
+
+    // Show the modal
+    document.getElementById('editModal').style.display = 'block';
 }
+
+    
+
+
+    function closeEditModal() {
+        // Hide the modal
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+// // Edit Product
+// function loadProductToForm(productId) {
+//     // Fetch product data from the server
+//     fetch(`/produits/${productId}/edit`)
+//         .then(response => response.json())
+//         .then(product => {
+//             // Fill the form fields with the fetched product data
+//             document.getElementById('nom_prod').value = product.nom_prod;
+//             document.getElementById('prix').value = product.prix;
+//             document.getElementById('description').value = product.description;
+//             document.getElementById('category').value = product.category;
+//             document.getElementById('quantite').value = product.quantite;
+            
+//             // Set the form action to update the product (PATCH/PUT)
+//             const form = document.getElementById('addProductForm');
+//             form.action = `/produits/${productId}`;
+            
+//             // Add or ensure _method field for PUT (for updating the product)
+//             let methodInput = form.querySelector('input[name="_method"]');
+//             if (!methodInput) {
+//                 methodInput = document.createElement('input');
+//                 methodInput.type = 'hidden';
+//                 methodInput.name = '_method';
+//                 methodInput.value = 'PUT';
+//                 form.appendChild(methodInput);
+//             }
+            
+//             // Change the button text to 'Update Product'
+//             const submitButton = form.querySelector('button[type="submit"]');
+//             submitButton.textContent = 'Update Product';
+//         })
+//         .catch(error => {
+//             console.error('Failed to load product data:', error);
+//             alert('Failed to load product data for editing.');
+//         });
+// }
+
+// Add event listener to all edit buttons dynamically
+document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-id');
+            loadProductToForm(productId); // Call the function to load the product data into the form
+        });
+    });
+});
+
 
 // Reset form when adding new product
 function resetProductForm() {
@@ -798,6 +926,9 @@ function resetProductForm() {
   if (methodInput) form.removeChild(methodInput);
 }
 </script>
+
+
+
 
 
    
@@ -883,37 +1014,37 @@ const sections = {
     ordersLink: "ordersSection"
 };
 
-    // Function to fetch data from local storage
-    function getData(key) {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : [];
-    }
+    // // Function to fetch data from local storage
+    // function getData(key) {
+    //   const data = localStorage.getItem(key);
+    //   return data ? JSON.parse(data) : [];
+    // }
 
-    // Function to save data to local storage
-    function saveData(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
+    // // Function to save data to local storage
+    // function saveData(key, data) {
+    //   localStorage.setItem(key, JSON.stringify(data));
+    // }
 
-    // Function to render products in the table
-    function renderProducts() {
-      const products = getData(PRODUCTS_KEY);
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
+    // // Function to render products in the table
+    // function renderProducts() {
+    //   const products = getData(PRODUCTS_KEY);
+    //   const tableBody = document.querySelector("#productTable tbody");
+    //   tableBody.innerHTML = "";
 
-      products.forEach((product, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${product.name}</td>
-          <td>$${product.price}</td>
-          <td>${product.description}</td>
-          <td class="action-buttons">
-            <button class="edit" onclick="editProduct(${index})">Edit</button>
-            <button class="delete" onclick="deleteProduct(${index})">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
+    //   products.forEach((product, index) => {
+    //     const row = document.createElement("tr");
+    //     row.innerHTML = `
+    //       <td>${product.name}</td>
+    //       <td>$${product.price}</td>
+    //       <td>${product.description}</td>
+    //       <td class="action-buttons">
+    //         <button class="edit" onclick="editProduct(${index})">Edit</button>
+    //         <button class="delete" onclick="deleteProduct(${index})">Delete</button>
+    //       </td>
+    //     `;
+    //     tableBody.appendChild(row);
+    //   });
+    // }
 
     // Function to render orders in the table
     function renderOrders() {
@@ -957,79 +1088,79 @@ const sections = {
       });
     }
 
-    // Add Product
-    document.getElementById("addProductForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const product = {
-        name: document.getElementById("productName").value,
-        price: parseFloat(document.getElementById("productPrice").value),
-        description: document.getElementById("productDescription").value,
-      };
-      const products = getData(PRODUCTS_KEY);
-      products.push(product);
-      saveData(PRODUCTS_KEY, products);
-      renderProducts();
-      document.getElementById("addProductForm").reset();
-    });
+    // // Add Product
+    // document.getElementById("addProductForm").addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   const product = {
+    //     name: document.getElementById("productName").value,
+    //     price: parseFloat(document.getElementById("productPrice").value),
+    //     description: document.getElementById("productDescription").value,
+    //   };
+    //   const products = getData(PRODUCTS_KEY);
+    //   products.push(product);
+    //   saveData(PRODUCTS_KEY, products);
+    //   renderProducts();
+    //   document.getElementById("addProductForm").reset();
+    // });
 
-    // Add Order
-    document.getElementById("addOrderForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const order = {
-        orderId: document.getElementById("orderId").value,
-        customerName: document.getElementById("customerName").value,
-        orderTotal: parseFloat(document.getElementById("orderTotal").value),
-      };
-      const orders = getData(ORDERS_KEY);
-      orders.push(order);
-      saveData(ORDERS_KEY, orders);
-      renderOrders();
-      document.getElementById("addOrderForm").reset();
-    });
+    // // Add Order
+    // document.getElementById("addOrderForm").addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   const order = {
+    //     orderId: document.getElementById("orderId").value,
+    //     customerName: document.getElementById("customerName").value,
+    //     orderTotal: parseFloat(document.getElementById("orderTotal").value),
+    //   };
+    //   const orders = getData(ORDERS_KEY);
+    //   orders.push(order);
+    //   saveData(ORDERS_KEY, orders);
+    //   renderOrders();
+    //   document.getElementById("addOrderForm").reset();
+    // });
 
-    // Add Customer
-    document.getElementById("addCustomerForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const customer = {
-        name: document.getElementById("customerName").value,
-        email: document.getElementById("customerEmail").value,
-        phone: document.getElementById("customerPhone").value,
-      };
-      const customers = getData(CUSTOMERS_KEY);
-      customers.push(customer);
-      saveData(CUSTOMERS_KEY, customers);
-      renderCustomers();
-      document.getElementById("addCustomerForm").reset();
-    });
+    // // Add Customer
+    // document.getElementById("addCustomerForm").addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   const customer = {
+    //     name: document.getElementById("customerName").value,
+    //     email: document.getElementById("customerEmail").value,
+    //     phone: document.getElementById("customerPhone").value,
+    //   };
+    //   const customers = getData(CUSTOMERS_KEY);
+    //   customers.push(customer);
+    //   saveData(CUSTOMERS_KEY, customers);
+    //   renderCustomers();
+    //   document.getElementById("addCustomerForm").reset();
+    // });
 
-    // Add Admin
-    document.getElementById("addAdminForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const admin = {
-        name: document.getElementById("adminName").value,
-        address: document.getElementById("adminAddress").value,
-        email: document.getElementById("adminEmail").value,
-        password: document.getElementById("adminPassword").value,
-      };
-      const admins = getData(ADMINS_KEY);
-      admins.push(admin);
-      saveData(ADMINS_KEY, admins);
-      alert("New admin added successfully!");
-      document.getElementById("addAdminForm").reset();
-      document.getElementById("adminForm").classList.add("hidden");
-    });
+    // // Add Admin
+    // document.getElementById("addAdminForm").addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   const admin = {
+    //     name: document.getElementById("adminName").value,
+    //     address: document.getElementById("adminAddress").value,
+    //     email: document.getElementById("adminEmail").value,
+    //     password: document.getElementById("adminPassword").value,
+    //   };
+    //   const admins = getData(ADMINS_KEY);
+    //   admins.push(admin);
+    //   saveData(ADMINS_KEY, admins);
+    //   alert("New admin added successfully!");
+    //   document.getElementById("addAdminForm").reset();
+    //   document.getElementById("adminForm").classList.add("hidden");
+    // });
 
-    // Edit Product
-    function editProduct(index) {
-      const products = getData(PRODUCTS_KEY);
-      const product = products[index];
-      document.getElementById("productName").value = product.name;
-      document.getElementById("productPrice").value = product.price;
-      document.getElementById("productDescription").value = product.description;
-      products.splice(index, 1);
-      saveData(PRODUCTS_KEY, products);
-      renderProducts();
-    }
+    // // Edit Product
+    // function editProduct(index) {
+    //   const products = getData(PRODUCTS_KEY);
+    //   const product = products[index];
+    //   document.getElementById("productName").value = product.name;
+    //   document.getElementById("productPrice").value = product.price;
+    //   document.getElementById("productDescription").value = product.description;
+    //   products.splice(index, 1);
+    //   saveData(PRODUCTS_KEY, products);
+    //   renderProducts();
+    // }
 
     // Delete Product
     function deleteProduct(index) {
