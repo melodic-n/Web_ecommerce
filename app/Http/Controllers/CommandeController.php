@@ -53,5 +53,22 @@ class CommandeController extends Controller
     }
     return view('customer.commande');
 
+}public function showOrderSummary()
+{
+    $cart = session('cart', []); 
+    $total = array_reduce($cart, function($carry, $product) {
+        return $carry + floatval(str_replace(' MAD', '', $product['prix']));
+    }, 0);
+
+    dd($cart, $total); // Dump the cart and total for debugging
+    return view('order-summary', compact('cart', 'total'));
 }
+
+
+ // Process the order (after payment)
+ public function processOrder(Request $request)
+ {
+     // change commande status to confirmed
+     return redirect()->route('order.confirmation');
+ }
 }

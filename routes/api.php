@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\ProduitController;
 
 
 /*
@@ -30,6 +31,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/paniers', [PanierController::class, 'show']);
 });
 
+Route::get('/products', [ProduitController::class, 'apiIndex']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/test', function () {

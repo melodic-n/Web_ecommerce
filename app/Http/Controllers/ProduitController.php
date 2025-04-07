@@ -14,18 +14,27 @@ class ProduitController extends Controller
         return view('dashboard', compact('produits'));
     }
 
+    public function getImage($id)
+    {
+        $produit = Produit::findOrFail($id);
+    
+        $imageData = $produit->img_prod;
+    
+        return response($imageData)
+            ->header('Content-Type', 'image/jpeg');
+    }
+    
     public function show($id)
     {
         $produit = Produit::findOrFail($id);
         return response()->json($produit);
     }
-
     public function apiIndex()
     {
         $products = Produit::all();
-        return response()->json($products);
+        return response()->json($products); // This converts the collection into JSON format
     }
-
+    
     public function store(Request $request)
     {
         $validated = $request->validate([

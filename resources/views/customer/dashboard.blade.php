@@ -1,91 +1,136 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moroccan Handicrafts</title>
+    <link rel="stylesheet" href="{{ asset('css/customer/produits.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/customer/logo_handies.png" alt="Logo">
+        </div>
+        <nav>
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact Us</a></li> 
+        <li><a href="{{ route('dashboard') }}">Service d'achat</a></li>
+        <li><a href="{{ route('about') }}">About Us</a></li>
+        <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+    </ul>
+</nav>
+        <div class="search-bar">
+            <input type="text" id="searchBar" placeholder="Recherchez un produit..." onkeyup="filterProducts()">
+            <button class="search-icon"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="icons">
+            <a href="javascript:void(0)" class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i> 
+            </a>            
+            <a href="wishlist.html" class="icon-link"><i class="fas fa-heart"></i></a>
+        </div>
 
-@section('content')
-    <h1>Welcome Customer</h1>
+        <div id="cart-container" class="cart-container" style="display: none;">
+            <h2>Votre Panier</h2>
+            <div id="cart-items"></div>
+            <div id="total-price" style="font-weight: bold;">Total: 0 MAD</div>
+            <button onclick="closeCart()">Fermer</button>
 
-    <h2>Add Product to Panier</h2>
-    <form id="add-to-panier-form">
-        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-        <label for="product_id">Product ID:</label>
-        <input type="number" name="product_id" id="product_id"><br>
-        <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" id="quantity"><br>
-        <button type="submit">Add to Panier</button>
-    </form>
+        </div>
+    </header>
 
-    <h2>Create Order</h2>
-    <button id="create-order-btn">Create Order</button>
-
-    <div id="api-results"></div>
-
+    <main>
+    <div class="products"></div> 
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section about">
+                <h2 style="color: #B28672;">About Us</h2>
+                <p style="color: black;">Discover the finest Moroccan handicrafts crafted by talented artisans.</p>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-section contact">
+                <h2 style="color: #B28672;">Contact Us</h2>
+                <p style="color: black;">Email: info@moroccanhandicrafts.com</p>
+                <p style="color: black;">Phone: +212 600 000 000</p>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-section social" style="margin-top: -20px;">
+                <h2 style="color: #B28672;">Follow Us</h2>
+                <a href="#"><i class="fab fa-facebook" style="font-size: 20px; color: #E77A4B;"></i></a>
+                <a href="#"><i class="fab fa-instagram" style="font-size: 20px; color: #E77A4B;"></i></a>
+                <a href="#"><i class="fab fa-whatsapp" style="font-size: 20px; color: #E77A4B;"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Moroccan Handicrafts. All rights reserved.</p>
+        </div>
+    </footer>
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    const addToPanierForm = document.getElementById('add-to-panier-form');
-    const createOrderBtn = document.getElementById('create-order-btn');
-    const apiResultsDiv = document.getElementById('api-results');
-
-    addToPanierForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const userId = document.querySelector('input[name="user_id"]').value;
-        const productId = document.getElementById('product_id').value;
-        const quantity = document.getElementById('quantity').value;
-
-        fetch('/api/panier', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                produits: [{ id: productId, quantite: quantity }]
-            })
-        })
-        .then(response => response.text()) // Get response as text first
-        .then(data => {
-            try {
-                const json = JSON.parse(data); // Try to parse as JSON
-                apiResultsDiv.innerText = JSON.stringify(json, null, 2);
-            } catch (error) {
-                apiResultsDiv.innerText = 'Error parsing JSON: ' + error;
-            }
-        })
-        .catch(error => {
-            apiResultsDiv.innerText = 'Error: ' + error;
-        });
-    });
-
-    createOrderBtn.addEventListener('click', function() {
-        fetch('/api/commandes/create', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer {{ Auth::user()->createToken('api_token')->plainTextToken }}'
-        }
-    })
-
-        .then(response => response.text()) // Get response as text first
-        .then(data => {
-            try {
-                const json = JSON.parse(data); // Try to parse as JSON
-                apiResultsDiv.innerText = JSON.stringify(json, null, 2);
-            } catch (error) {
-                apiResultsDiv.innerText = 'Error parsing JSON: ' + error;
-            }
-        })
-        .catch(error => {
-            apiResultsDiv.innerText = 'Error: ' + error;
-        });
-    });
-});
-
+        var userId = {{ auth()->user()->id }};  
+        var orderRoute = "/commande";
     </script>
+    
+    
+    <style>
+        .footer-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #F4C4B0;
+            padding: 3px; /* Réduction de la hauteur */
+        }
+        .footer-section {
+            text-align: center;
+            width: 30%;
+            font-size: 12px; /* Réduction de la taille du texte */
+        }
+        .footer-divider {
+            width: 2px;
+            height: 80px; /* Réduction de la hauteur du séparateur */
+            background-color: #B28672;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding: 1px;
+            background-color: #F4C4B0;
+            color: black;
+            font-size: 10px; /* Réduction de la taille du texte */
+        }
+        .logout-container {
+    margin-left: 20px; /* Adjust spacing as needed */
+}
 
-    <a href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        Logout
-    </a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-@endsection
+.logout-btn {
+    background-color: #000; /* Black background */
+    color: #E77A4B; /* Somo (Moroccan terracotta) text */
+    border: 2px solid #E77A4B; /* Pink border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background-color: #E77A4B; /* Pink background on hover */
+    color: #000; /* Black text on hover */
+}
+
+.logout-btn i {
+    font-size: 16px;
+}
+    </style>
+   
+<script src="{{ asset('js/customer/produits.js') }}"></script>
+
+
+
+</body>
+</html>
+

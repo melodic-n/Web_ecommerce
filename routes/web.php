@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; 
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PaypalController; // Make sure this use statement is present
 
 /*
@@ -58,9 +59,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/customers', [CustomerController::class, 'index'])->name('admin.customers');
+    Route::get('/order-summary', [CommandeController::class, 'showOrderSummary'])->name('order.summary');
     Route::get('/commandes', [CommandeController::class, 'index'])->name('admin.commandes');
-
-    // Product Management Routes for Admin
     Route::get('/products', [ProduitController::class, 'index'])->name('admin.products.index');
     Route::get('/products/create', [ProduitController::class, 'create'])->name('admin.products.create');
     Route::post('/products', [ProduitController::class, 'store'])->name('admin.products.store');
@@ -71,7 +71,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
-    Route::get('/', [CustomerController::class, 'index'])->name('customer.dashboard');
+    Route::get('/', [CustomerController::class, 'indexProduct'])->name('customer.dashboard');
+    Route::get('/api/products', [ProduitController::class, 'apiIndex']);
     Route::post('/panier', [PanierController::class, 'store']);
     Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']);
     Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
@@ -79,6 +80,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
     Route::get('/commande/{id}', [CommandeController::class, 'index']);
     Route::post('/commandes/create', [CommandeController::class, 'createOrder']);
     Route::get('/paniers', [PanierController::class, 'show']);
+
 });
 
 // Authentication Routes (already included by Breeze/Fortify)
@@ -97,28 +99,9 @@ Route::get('/user/register', function () {
     return view('customer.user');
 })->name('customer.user');
 Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::get('/image/{id}', [ProduitController::class, 'getImage']);
 
-// Redundant route - already handled within the admin group
-// Route::get('/produits/{id}/edit', [ProduitController::class, 'edit']);
-// Route::put('/produits/{id}', [ProduitController::class, 'update']);
-// Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
-// Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');
-// Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');
-// Route::get('/produits/{produit}', [ProduitController::class, 'show'])->name('produits.show');
-// Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
-// Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
-// Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
 
-// Redundant route - already handled within the admin group
-// Route::get('produits/{id}/edit', [ProduitController::class, 'edit']);
-
-//         return 'Test insert successful!';
-//     } catch (\Exception $e) {
-//         return 'Test insert failed: ' . $e->getMessage();
-//     }
-// });
-
-// routes/web.php or routes/api.php
 
 Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
