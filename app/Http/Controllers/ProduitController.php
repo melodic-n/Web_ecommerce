@@ -11,9 +11,9 @@ class ProduitController extends Controller
     public function index()
     {
         $produits = Produit::all();
-        return view('dashboard', compact('produits'));
+        return view('customer.produits', compact('produits'));
     }
-
+    
     public function show($id)
     {
         $produit = Produit::findOrFail($id);

@@ -236,21 +236,19 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const commandeItems = document.getElementById('commande-items');
     const totalPriceElement = document.getElementById('commande-total-price');
-
+    
     if (cart.length > 0) {
         let totalPrice = 0;
-
         cart.forEach(product => {
             const productElement = document.createElement('div');
             productElement.classList.add('commande-item');
-
             const price = parseFloat(product.price.replace(' MAD', '').replace(' ', ''));
             totalPrice += price;
-
+            
+            // Changed from product.img_prod to product.image
             productElement.innerHTML = `
                 <img src="${product.image}" alt="${product.name}">
                 <div>
@@ -258,29 +256,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div>${product.price}</div>
                 </div>
             `;
-
             commandeItems.appendChild(productElement);
         });
-
         totalPriceElement.textContent = `${totalPrice.toFixed(2)} MAD`;
     } else {
         commandeItems.innerHTML = '<p>Votre panier est vide</p>';
     }
-
+    
     const paiementLivraison = document.getElementById('paiement-livraison');
-
     paiementLivraison.addEventListener('change', function() {
         // Only handle paiement-livraison logic since carte is removed
     });
-
+    
     const confirmerCommande = document.getElementById('confirmer-commande');
     const commandeForm = document.getElementById('commande-form');
-
     confirmerCommande.addEventListener('click', function() {
-
         const required = commandeForm.querySelectorAll('[required]');
         let isValid = true;
-
         required.forEach(field => {
             if (!field.value.trim()) {
                 isValid = false;
@@ -289,13 +281,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('error');
             }
         });
-
+        
         if (isValid) {
-
             alert('Votre commande a été confirmée! ');
-
             localStorage.removeItem('cart');
-
             setTimeout(() => {
                 window.location.href = "{{ route('home') }}";
             }, 2000);
