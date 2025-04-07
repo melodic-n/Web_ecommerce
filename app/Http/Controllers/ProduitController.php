@@ -2,60 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produit;  
+use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProduitController extends Controller
 {
     public function index()
     {
         $produits = Produit::all();
-        return response()->json($produits); 
+        return view('dashboard', compact('produits'));
     }
 
     public function show($id)
     {
         $produit = Produit::findOrFail($id);
-        return response()->json($produit); 
+        return response()->json($produit);
+    }
+
+    public function apiIndex()
+    {
+        $products = Produit::all();
+        return response()->json($products);
     }
 
     public function store(Request $request)
     {
-        $produit = Produit::create($request->all());
-        return response()->json($produit, 201);
+        $validated = $request->validate([
+            'nom_prod' => 'required|string|max:255',
+            'prix' => 'required|numeric|min:0',
+            'description' => 'required|string',
+            'category' => 'required|string',
+            'quantite' => 'required|integer|min:0',
+            'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('img_prod')) {
+            $imagePath = $request->file('img_prod')->store('products', 'public');
+            $validated['img_prod'] = $imagePath;
+        }
+
+        Produit::create($validated);
+        return redirect()->back()->with('success', 'Product added!');
     }
 
     public function edit($id)
     {
         $produit = Produit::findOrFail($id);
-        return response()->json($produit); 
-    }
-
-  public function update(Request $request, $id)
-{
-    $produit = Produit::find($id);
     
-    if (!$produit) {
-        return response()->json(['message' => 'Product not found'], 404);
+        return response()->json($produit);
     }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nom_prod' => 'nullable|string|max:255',
+            'prix' => 'nullable|numeric',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string',
+            'quantite' => 'nullable|integer',
+            'img_prod' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $produit = Produit::findOrFail($id);
 
-    $produit->nom_prod = $request->input('nom_prod', $produit->nom_prod); // Update only the fields that are passed in the request
-    $produit->prix = $request->input('prix', $produit->prix);
-    $produit->img_prod = $request->input('img_prod', $produit->img_prod);
-    $produit->description = $request->input('description', $produit->description);
-    $produit->category = $request->input('category', $produit->category);
-    $produit->quantite = $request->input('quantite', $produit->quantite);
+        // Update product fields
+        $produit->nom_prod = $request->nom_prod ?? $produit->nom_prod;
+        $produit->prix = $request->prix ?? $produit->prix;
+        $produit->description = $request->description ?? $produit->description;
+        $produit->category = $request->category ?? $produit->category;
+        $produit->quantite = $request->quantite ?? $produit->quantite;
+    
+        // Handle image upload
+        if ($request->hasFile('img_prod')) {
+            $imagePath = $request->file('img_prod')->store('products', 'public');
+            $produit->img_prod = $imagePath;
+        }
+    
+        $produit->save();
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully');
+        }
+    
 
-    $produit->save();
-
-    return response()->json(['message' => 'Product updated successfully', 'data' => $produit]);
-}
 
     public function destroy($id)
     {
         $produit = Produit::findOrFail($id);
         $produit->delete();
-        return response()->json(['message' => 'Product deleted successfully']); 
+        return redirect()->route('admin.dashboard');
     }
 }
-
