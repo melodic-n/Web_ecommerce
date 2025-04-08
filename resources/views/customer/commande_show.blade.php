@@ -18,9 +18,14 @@
 
     <h3>Articles:</h3>
     <ul>
-        @foreach($commande->panier->produits as $produit)
-            <li>{{ $produit->nom_prod }} - {{ number_format($produit->pivot->quantite * $produit->prix, 2) }} MAD</li>
+        @foreach($cartData as $item)
+            <li>{{ $item['nom_prod'] }} - {{ number_format($item['quantity'] * $item['price'], 2) }} MAD</li>
         @endforeach
     </ul>
+
+    <!-- Button to go back to the homepage -->
+    <div>
+        <a href="{{ url('/') }}" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
 
 @endsection

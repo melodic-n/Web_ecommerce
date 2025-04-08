@@ -14,12 +14,14 @@ return new class extends Migration
             $table->string('status'); 
             $table->float('montant');
             $table->string('livraison_info'); 
-            $table->json('cart_data')->nullable(); // Change to json type
-            $table->foreignId('panier_id')->nullable()->constrained(); // Make panier_id nullable
+            $table->json('cart_data')->nullable(); 
+            
+            // Add the panier_id column
+            $table->foreignId('panier_id')->nullable()->constrained('paniers')->onDelete('set null');
+            
             $table->timestamps();
         });
     }
-    
 
     public function down(): void
     {

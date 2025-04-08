@@ -43,10 +43,10 @@ class CommandeController extends Controller
     {
         // Enable query log
         DB::enableQueryLog();
-    
+        
         // Log incoming request data
         Log::info('Commande data:', $request->all());
-    
+        
         // Validate incoming data
         $validated = $request->validate([
             'nom' => 'required',
@@ -57,31 +57,33 @@ class CommandeController extends Controller
             'total_amount' => 'required|numeric',
             'panier_id' => 'required|exists:paniers,id',  // Ensure panier exists in the database
         ]);
-    
+        
         // Fetch the panier using panier_id
         $panier = Panier::with('produits')->find($request->panier_id);
-    
+        
         if (!$panier) {
             return response()->json([
                 'success' => false,
                 'message' => 'Panier not found.',
             ]);
         }
-    
+        
         // Prepare the cart data (product details from the panier)
-        $cartData = $panier->produits->map(function ($produit) {
-            return [
-                'product_id' => $produit->id,  // Assuming product has `id`
-                'quantity' => $produit->pivot->quantite,  // Get quantity from the pivot table
-                'price' => $produit->prix,  // Assuming product has `prix`
-            ];
-        });
-    
+   // Prepare the cart data (product details from the panier)
+$cartData = $panier->produits->map(function ($produit) {
+    return [
+        'product_id' => $produit->id,  // Assuming product has `id`
+        'quantity' => $produit->pivot->quantite,  // Get quantity from the pivot table
+        'price' => $produit->prix,  // Assuming product has `prix`
+        'nom_prod' => $produit->nom_prod,  // Add product name here
+    ];
+});
+
         // Calculate the total price of the cart
         $totalPrice = $panier->produits->sum(function ($produit) {
             return $produit->pivot->quantite * $produit->prix; // Multiply quantity by product price
         });
-    
+        
         // Create a new Commande (order)
         $commande = new Commande();
         $commande->user_id = auth()->id();
@@ -96,18 +98,22 @@ class CommandeController extends Controller
         ]);
         $commande->cart_data = json_encode($cartData);  // Store the cart data as JSON
         $commande->panier_id = $request->panier_id;  // Associate the panier with the order
-    
+        
         // Attempt to save the order
         $isSaved = $commande->save();
-    
+        
         // Log if saving the order was successful
         Log::info('Commande saved:', ['success' => $isSaved, 'orderId' => $commande->id]);
-    
+        
         // Log any database queries
         Log::info('SQL Queries: ' . json_encode(DB::getQueryLog()));
-    
-        // If the order was saved successfully, redirect to the order show page
+        
+        // If the order was saved successfully
         if ($isSaved) {
+            // Delete the associated panier after order creation
+            $panier->delete();
+            Log::info('Panier deleted:', ['panier_id' => $panier->id]);
+    
             return redirect()->route('commande.show', ['id' => $commande->id])
                 ->with('success', 'Your order has been successfully placed.');
         } else {
@@ -117,14 +123,17 @@ class CommandeController extends Controller
             ]);
         }
     }
-    
-
     public function show($id)
     {
         Log::info('Fetching order with id: ' . $id);
-
+    
         $commande = Commande::findOrFail($id); // Find the order by ID
-
-        return view('customer.commande_show', compact('commande')); // Pass the order to the view
+    
+        // Decode the cart data from JSON into an array
+        $cartData = json_decode($commande->cart_data, true);
+    
+    
+        return view('customer.commande_show', compact('commande', 'cartData')); // Pass cartData to the view
     }
-}
+    
+}    
