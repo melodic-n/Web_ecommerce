@@ -95,7 +95,7 @@
     </footer>
     <script>
         var userId = {{ auth()->user()->id }};  
-        var orderRoute = "/customer/commande/" + userId;
+        var orderRoute = "/customer/commande/"
     </script>
     
     
@@ -154,12 +154,6 @@
    
 <script src="{{ asset('js/customer/produits.js') }}"></script>
 
-
-<script>
-    var userId = {{ auth()->user()->id }};
-    console.log(userId)  ;
-    var orderRoute = "/customer/commande/" + userId;
-</script>
 
 </body>
 </html>

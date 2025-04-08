@@ -10,14 +10,9 @@ class Commande extends Model
 {
     use HasFactory;
 
+   
     protected $fillable = [
-        'user_id',
-        'status',
-        'montant',
-        'livraison_info',
-        'cart_data',  // Add cart_data
-        'total_amount', // Add total_amount if needed
-        'panier_id'
+        'user_id', 'status', 'montant', 'livraison_info', 'cart_data', 'panier_id'
     ];
 
     // Existing relationships

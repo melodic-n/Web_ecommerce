@@ -88,7 +88,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
     // Order routes
     Route::get('/commande', [CommandeController::class, 'index'])->name('customer.commande');  // Show cart or order view
     Route::get('/commande/reciept/{id}', [CommandeController::class, 'show'])->name('customer.commande.show');  // Show specific order details
-    Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');  // Create a new order // Create a new order
+    Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');
 });
 
 // Authentication Routes (already included by Breeze/Fortify)

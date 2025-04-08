@@ -15,36 +15,40 @@
             <strong>Total: <span id="commande-total-price">{{ $totalAmount }} MAD</span></strong>
             </div>
         </div>
+<!-- Informations de livraison -->
+<div class="section livraison-info">
+    <h3>Informations de livraison</h3>
+    <form id="commande-form" action="{{ route('commande.store') }}" method="POST">
+    @csrf
+    <input type="hidden" name="panier_id" value="{{ $panier->id }}">
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" value="{{ $customer ? $customer->nom : '' }}" required>
+        </div>
 
-        <!-- Informations de livraison -->
-        <div class="section livraison-info">
-            <h3>Informations de livraison</h3>
-            <form id="commande-form" action="{{ route('commande.store') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ $customer ? $customer->nom : '' }}" required>
-                </div>
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" value="{{ $customer ? $customer->prenom : '' }}" required>
+        </div>
 
-                <div class="form-group">
-                    <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ $customer ? $customer->prenom : '' }}" required>
-                </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <!-- Use email from the authenticated User model -->
+            <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" required>
+        </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ $user->email }}" required>
-                </div>
+        <div class="form-group">
+            <label for="tel">Téléphone</label>
+            <input type="tel" id="tel" name="tel" value="{{ $customer ? $customer->tel : '' }}" required>
+        </div>
 
-                <div class="form-group">
-                    <label for="tel">Téléphone</label>
-                    <input type="tel" id="tel" name="tel" value="{{ $customer ? $customer->tel : '' }}" required>
-                </div>
+        <div class="form-group">
+            <label for="adresse">Adresse de livraison</label>
+            <textarea id="adresse" name="adresse" required>{{ $customer ? $customer->adresse : '' }}</textarea>
+        </div>
 
-                <div class="form-group">
-                    <label for="adresse">Adresse de livraison</label>
-                    <textarea id="adresse" name="adresse" required>{{ $customer ? $customer->adresse : '' }}</textarea>
-                </div>
+</div>
+
 
 
                <!-- Hidden fields for cart data -->
@@ -68,8 +72,8 @@
         </div> -->
 
         <div class="commande-actions">
-            <button type="button" id="confirmer-commande" class="btn-primary">Confirmer la commande</button> <!-- recu -->
-            <a href="{{ route('customer.dashboard') }}" class="btn-secondary">Continuer mes achats</a>
+        <button type="submit" id="confirmer-commande" class="btn-primary">Confirmer la commande</button>
+        <a href="{{ route('customer.dashboard') }}" class="btn-secondary">Continuer mes achats</a>
         </div>
     </div>
 </div>
@@ -79,39 +83,49 @@
         {{ session('success') }}
     </div>
 @endif
+<!-- Your form fields and other content... -->
 
-<script>document.addEventListener('DOMContentLoaded', function() {
-    const confirmerCommande = document.getElementById('confirmer-commande');
-    const commandeForm = document.getElementById('commande-form');
+<!-- Add the script below the form --><script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ensure that the form exists before proceeding
+        const commandeForm = document.getElementById('commande-form');
+        if (!commandeForm) {
+            console.error('Form with ID "commande-form" not found.');
+            return; // Exit if the form is not found
+        }
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const confirmerCommande = document.getElementById('confirmer-commande');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    confirmerCommande.addEventListener('click', function() {
-    document.getElementById('cart-data').value = JSON.stringify(cart);
+        confirmerCommande.addEventListener('click', function () {
+            // Populate the hidden fields with cart data and total amount
+            document.getElementById('cart-data').value = JSON.stringify(cart);
 
-    let totalAmount = cart.reduce((sum, item) => sum + parseFloat(item.price.replace(' MAD', '').trim()), 0);
-    document.getElementById('total-amount').value = totalAmount.toFixed(2);
-        
-    const required = commandeForm.querySelectorAll('[required]');
-    let isValid = true;
-        
-        required.forEach(field => {
-            if (!field.value.trim()) {
-                isValid = false;
-                field.classList.add('error');
+            // Calculate total amount
+            let totalAmount = cart.reduce((sum, item) => sum + parseFloat(item.price.replace(' MAD', '').trim()), 0);
+            document.getElementById('total-amount').value = totalAmount.toFixed(2);
+
+            // Validate the required fields
+            const requiredFields = commandeForm.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(function (field) {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('error'); // Add error styling
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            // If all fields are valid, submit the form
+            if (isValid) {
+                commandeForm.submit();
             } else {
-                field.classList.remove('error');
+                alert('Veuillez remplir tous les champs obligatoires.');
             }
         });
-        
-        if (isValid) {
-            commandeForm.submit();
-        } else {
-            alert('Veuillez remplir tous les champs obligatoires.');
-        }
     });
-});
-
 </script>
 
 
