@@ -81,9 +81,9 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
     // Cart routes
     Route::post('/panier', [PanierController::class, 'store']);
     Route::post('/panier/{id}/ajouter', [PanierController::class, 'ajouterArticle']);
-    Route::delete('/panier/{id}/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
-    Route::put('/panier/{id}/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']);
-    Route::get('/paniers', [PanierController::class, 'show']);
+    Route::delete('/panier/retirer/{produitId}', [PanierController::class, 'retirerArticle']);
+    Route::put('/panier/modifier/{produitId}', [PanierController::class, 'modifierQteArticle']);
+     Route::get('/paniers', [PanierController::class, 'show']);
 
     // Order routes
     Route::get('/commande', [CommandeController::class, 'index'])->name('customer.commande');  // Show cart or order view

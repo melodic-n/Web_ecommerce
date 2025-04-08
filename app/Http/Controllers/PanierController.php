@@ -106,44 +106,72 @@ class PanierController extends Controller
         return response()->json(['message' => 'Produit ajouté/mis à jour', 'panier' => $panier->refresh()]);
     }
 
-    public function retirerArticle($produitId)
-    {
-        Log::info('Retirer article request received', ['produitId' => $produitId]);
-
-        $user = Auth::user();
-        $panier = Panier::where('user_id', $user->id)->firstOrFail();
-        $produit = Produit::findOrFail($produitId);
-
-        $panier->produits()->detach($produit->id);
-
-        $this->updatePrixTotal($panier);
-
-        return response()->json(['message' => 'Produit retiré', 'panier' => $panier->refresh()]);
-    }
-
-    public function modifierQteArticle(Request $request, $produitId)
-    {
-        Log::info('Modifier quantité request received', ['data' => $request->all()]);
-
-        $user = Auth::user();
-        $panier = Panier::where('user_id', $user->id)->firstOrFail();
-        $produit = Produit::findOrFail($produitId);
-        $nouvelleQuantite = $request->quantite;
-
-        $panier->produits()->updateExistingPivot($produit->id, ['quantite' => $nouvelleQuantite]);
-
-        $this->updatePrixTotal($panier);
-
-        return response()->json(['message' => 'Quantité modifiée', 'panier' => $panier->refresh()]);
-    }
-
-    private function updatePrixTotal(Panier $panier)
-    {
-        $total = 0;
-        foreach ($panier->produits as $produit) {
-            $total += $produit->prix * $produit->pivot->quantite;
-        }
-        $panier->update(['prix_total' => $total]);
-        Log::info("Prix total mis à jour", ['panierId' => $panier->id, 'nouveauPrixTotal' => $total]);
-    }
+   // app/Http/Controllers/PanierController.php
+   public function retirerArticle($produitId)
+   {
+       Log::info('Retirer article request received', ['produitId' => $produitId]);
+   
+       $user = Auth::user();
+       $panier = Panier::where('user_id', $user->id)->firstOrFail();  // Find the user's cart
+       $produit = Produit::findOrFail($produitId);  // Find the product by ID
+   
+       // Detach the product from the cart
+       $panier->produits()->detach($produit->id);
+   
+       // Update the total price of the cart
+       $this->updatePrixTotal($panier);
+   
+       // Return a response with the updated cart
+       return response()->json(['message' => 'Produit retiré', 'panier' => $panier->refresh()]);
+   }
+   public function modifierQteArticle(Request $request, $produitId)
+   {
+       // Fetch the user's cart
+       $panier = Panier::where('user_id', Auth::id())->first();
+   
+       if (!$panier) {
+           Log::error("Panier not found for user: " . Auth::id());
+           return response()->json(['message' => 'Panier non trouvé'], 404);
+       }
+   
+       // Find the product in the cart
+       $product = $panier->produits()->where('produit_id', $produitId)->first();
+   
+       if (!$product) {
+           Log::error("Product not found in cart for product ID: $produitId");
+           return response()->json(['message' => 'Produit non trouvé dans le panier'], 404);
+       }
+   
+       // Check if the quantity is valid
+       if ($request->quantite < 1) {
+           return response()->json(['message' => 'Quantité invalide'], 400);
+       }
+   
+       // Update the quantity
+       $product->pivot->quantite = $request->quantite;
+       $product->pivot->save();
+   
+       // Recalculate the total price
+       $this->updatePrixTotal($panier);
+   
+       // Log updated panier details for debugging
+       Log::info('Panier after updating quantity', ['panier' => $panier->load('produits')]);
+   
+       // Return updated cart data as JSON
+       return response()->json([
+           'message' => 'Quantité modifiée',
+           'panier' => $panier->load('produits')
+       ]);
+   }
+   
+   private function updatePrixTotal(Panier $panier)
+   {
+       $total = 0;
+       foreach ($panier->produits as $produit) {
+           $total += $produit->prix * $produit->pivot->quantite;
+       }
+       $panier->update(['prix_total' => $total]);
+       Log::info("Prix total mis à jour", ['panierId' => $panier->id, 'nouveauPrixTotal' => $total]);
+   }
+   
 }
