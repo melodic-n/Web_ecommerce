@@ -39,63 +39,85 @@ class CommandeController extends Controller
         // Pass the user and customer data to the view
         return view('customer.commande', compact('cartItems', 'totalAmount', 'panier', 'customer'));
     }
-    
     public function store(Request $request)
-{
-    // Enable query log
-    DB::enableQueryLog();
-
-    // Log incoming request data
-    Log::info('Commande data:', $request->all());
-
-    // Validate incoming data
-    $validated = $request->validate([
-        'nom' => 'required',
-        'prenom' => 'required',
-        'email' => 'required|email',
-        'tel' => 'required',
-        'adresse' => 'required',
-        'total_amount' => 'required|numeric',
-        'cart_data' => 'required|json',
-        'panier_id' => 'required|exists:paniers,id',  // Ensure panier exists in the database
-    ]);
-
-    // Create a new command
-    $commande = new Commande();
-    $commande->user_id = auth()->id();
-    $commande->status = 'pending';
-    $commande->montant = $request->total_amount;
-    $commande->livraison_info = json_encode([
-        'nom' => $request->nom,
-        'prenom' => $request->prenom,
-        'email' => $request->email,
-        'tel' => $request->tel,
-        'adresse' => $request->adresse,
-    ]);
-    $commande->cart_data = $request->cart_data;
-    $commande->panier_id = $request->panier_id;
-
-    // Attempt to save the order
-    $isSaved = $commande->save();
-
-    // Log if saving the order was successful
-    Log::info('Commande saved:', ['success' => $isSaved, 'orderId' => $commande->id]);
-
-    // Log any database queries
-    Log::info('SQL Queries: ' . json_encode(DB::getQueryLog()));
-
-    if ($isSaved) {
-        return response()->json([
-            'success' => true,
-            'orderId' => $commande->id,
+    {
+        // Enable query log
+        DB::enableQueryLog();
+    
+        // Log incoming request data
+        Log::info('Commande data:', $request->all());
+    
+        // Validate incoming data
+        $validated = $request->validate([
+            'nom' => 'required',
+            'prenom' => 'required',
+            'email' => 'required|email',
+            'tel' => 'required',
+            'adresse' => 'required',
+            'total_amount' => 'required|numeric',
+            'panier_id' => 'required|exists:paniers,id',  // Ensure panier exists in the database
         ]);
-    } else {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to create order.',
+    
+        // Fetch the panier using panier_id
+        $panier = Panier::with('produits')->find($request->panier_id);
+    
+        if (!$panier) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Panier not found.',
+            ]);
+        }
+    
+        // Prepare the cart data (product details from the panier)
+        $cartData = $panier->produits->map(function ($produit) {
+            return [
+                'product_id' => $produit->id,  // Assuming product has `id`
+                'quantity' => $produit->pivot->quantite,  // Get quantity from the pivot table
+                'price' => $produit->prix,  // Assuming product has `prix`
+            ];
+        });
+    
+        // Calculate the total price of the cart
+        $totalPrice = $panier->produits->sum(function ($produit) {
+            return $produit->pivot->quantite * $produit->prix; // Multiply quantity by product price
+        });
+    
+        // Create a new Commande (order)
+        $commande = new Commande();
+        $commande->user_id = auth()->id();
+        $commande->status = 'pending';  // Order is initially pending
+        $commande->montant = $totalPrice;  // Set the total price of the order
+        $commande->livraison_info = json_encode([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'tel' => $request->tel,
+            'adresse' => $request->adresse,
         ]);
+        $commande->cart_data = json_encode($cartData);  // Store the cart data as JSON
+        $commande->panier_id = $request->panier_id;  // Associate the panier with the order
+    
+        // Attempt to save the order
+        $isSaved = $commande->save();
+    
+        // Log if saving the order was successful
+        Log::info('Commande saved:', ['success' => $isSaved, 'orderId' => $commande->id]);
+    
+        // Log any database queries
+        Log::info('SQL Queries: ' . json_encode(DB::getQueryLog()));
+    
+        // If the order was saved successfully, redirect to the order show page
+        if ($isSaved) {
+            return redirect()->route('commande.show', ['id' => $commande->id])
+                ->with('success', 'Your order has been successfully placed.');
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create order.',
+            ]);
+        }
     }
-}
+    
 
     public function show($id)
     {
