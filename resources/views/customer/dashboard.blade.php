@@ -35,7 +35,6 @@
             <a href="javascript:void(0)" class="cart-icon" onclick="toggleCart()">
                 <i class="fas fa-shopping-cart"></i>
             </a>
-            <a href="#" class="icon-link"><i class="fas fa-heart"></i></a>
         </div>
 
         <div id="cart-container" class="cart-container" style="display: none;">
@@ -47,27 +46,38 @@
     </header>
 
     <main>
-        <div class="products">
-            @foreach($produits as $produit)
-            <div class="rectangle" data-id="{{ $produit->id }}" data-name="{{ $produit->nom_prod }}">
-            <div class="image-container" style="background-image: url('http://127.0.0.1:8000/storage/products/4PH1DY0I1QmjRlxoGaYpM8xoxrc9O5nP35Pvu3LX.jpg');"></div>
-            <div class="product-rating">
+    <div class="products">
+        @foreach($produits as $produit)
+        <div class="product-item" data-id="{{ $produit->id }}" data-name="{{ $produit->nom_prod }}" data-price="{{ $produit->prix }}">
+            <div class="image-container" style="background-image: url('{{ asset($produit->img_prod) }}');"></div>
+            <div class="product-info">
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="product-name">{{ $produit->nom_prod }}</div>
+                <div class="product-price">{{ $produit->prix }} MAD</div>
+                <div class="product-description">{{ $produit->description }}</div>
                 
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
+                <!-- Add to Cart Button -->
+                <button class="add-to-cart-btn" onclick="addToCart({
+                    id: {{ $produit->id }},
+                    name: '{{ addslashes($produit->nom_prod) }}',
+                    price: {{ $produit->prix }},
+                    image: '{{ asset($produit->img_prod) }}',
+                    description: '{{ addslashes($produit->description) }}'
+                })">
+                    <i class="fas fa-cart-plus"></i> Ajouter au panier
+                </button>
+            </div>
         </div>
-        <div class="product-name">{{ $produit->nom_prod }}</div>
-        <div class="product-price">{{ $produit->prix }} MAD</div>
-        <div class="product-description">{{ $produit->description }}</div>
+        @endforeach
     </div>
-</div>
+</main>
 
-            @endforeach
-        </div>
-    </main>
+
 
     <footer>
         <div class="footer-container">
@@ -98,60 +108,109 @@
         var orderRoute = "/customer/commande/"
     </script>
     
-    
     <style>
+        /* Main Product Grid Layout */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: scale(1.05);
+        }
+
+        .image-container {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-color: #f0f0f0;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .product-price {
+            font-size: 1.2em;
+            color: #E77A4B;
+            margin-top: 5px;
+        }
+
+        .product-description {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        .product-rating i {
+            color: #FFD700;
+        }
+
+        .add-to-cart-btn {
+            background-color: #E77A4B;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #B28672;
+        }
+
+        /* Footer Styles */
         .footer-container {
             display: flex;
             justify-content: space-around;
             align-items: center;
             background-color: #F4C4B0;
-            padding: 3px; /* Réduction de la hauteur */
+            padding: 20px;
         }
+
         .footer-section {
             text-align: center;
             width: 30%;
-            font-size: 12px; /* Réduction de la taille du texte */
+            font-size: 14px;
         }
+
         .footer-divider {
             width: 2px;
-            height: 80px; /* Réduction de la hauteur du séparateur */
+            height: 80px;
             background-color: #B28672;
         }
+
         .footer-bottom {
             text-align: center;
-            padding: 1px;
+            padding: 10px;
             background-color: #F4C4B0;
             color: black;
-            font-size: 10px; /* Réduction de la taille du texte */
+            font-size: 12px;
         }
-        .logout-container {
-    margin-left: 20px; /* Adjust spacing as needed */
-}
-
-.logout-btn {
-    background-color: #000; /* Black background */
-    color: #E77A4B; /* Somo (Moroccan terracotta) text */
-    border: 2px solid #E77A4B; /* Pink border */
-    border-radius: 25px; /* Rounded corners */
-    padding: 8px 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.logout-btn:hover {
-    background-color: #E77A4B; /* Pink background on hover */
-    color: #000; /* Black text on hover */
-}
-
-.logout-btn i {
-    font-size: 16px;
-}
     </style>
-   
 <script src="{{ asset('js/customer/produits.js') }}"></script>
 
 

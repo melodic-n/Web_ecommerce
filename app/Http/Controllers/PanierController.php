@@ -90,22 +90,43 @@ class PanierController extends Controller
     public function ajouterArticle(Request $request)
     {
         Log::info('Ajouter article request received', ['data' => $request->all()]);
-
+    
+        // Get the authenticated user
         $user = Auth::user();
+    
+        // Find or fail the panier for the authenticated user
         $panier = Panier::where('user_id', $user->id)->firstOrFail();
+    
+        // Find or fail the product that we are trying to add
         $produit = Produit::findOrFail($request->id);
-
+    
+        // Get the quantity from the request or set it to 1 if not provided
         $quantite = $request->quantite ?? 1;
-
+    
+        // Check if the requested quantity is available in stock
+        if ($quantite > $produit->stock) {
+            // If not enough stock, return an error response
+            return response()->json([
+                'message' => 'Stock insuffisant pour ce produit.',
+                'available_stock' => $produit->stock
+            ], 400); // 400 Bad Request
+        }
+    
+        // If there's enough stock, add the product to the cart
         $panier->produits()->syncWithoutDetaching([
             $produit->id => ['quantite' => $quantite]
         ]);
-
+    
+        // Update the total price of the panier
         $this->updatePrixTotal($panier);
-
-        return response()->json(['message' => 'Produit ajouté/mis à jour', 'panier' => $panier->refresh()]);
+    
+        // Return success response
+        return response()->json([
+            'message' => 'Produit ajouté/mis à jour',
+            'panier' => $panier->refresh()
+        ]);
     }
-
+    
    // app/Http/Controllers/PanierController.php
    public function retirerArticle($produitId)
    {

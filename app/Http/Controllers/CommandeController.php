@@ -38,8 +38,7 @@ class CommandeController extends Controller
 
         // Pass the user and customer data to the view
         return view('customer.commande', compact('cartItems', 'totalAmount', 'panier', 'customer'));
-    }
-    public function store(Request $request)
+    }public function store(Request $request)
     {
         // Enable query log
         DB::enableQueryLog();
@@ -69,16 +68,15 @@ class CommandeController extends Controller
         }
         
         // Prepare the cart data (product details from the panier)
-   // Prepare the cart data (product details from the panier)
-$cartData = $panier->produits->map(function ($produit) {
-    return [
-        'product_id' => $produit->id,  // Assuming product has `id`
-        'quantity' => $produit->pivot->quantite,  // Get quantity from the pivot table
-        'price' => $produit->prix,  // Assuming product has `prix`
-        'nom_prod' => $produit->nom_prod,  // Add product name here
-    ];
-});
-
+        $cartData = $panier->produits->map(function ($produit) {
+            return [
+                'product_id' => $produit->id,  // Assuming product has `id`
+                'quantity' => $produit->pivot->quantite,  // Get quantity from the pivot table
+                'price' => $produit->prix,  // Assuming product has `prix`
+                'nom_prod' => $produit->nom_prod,  // Add product name here
+            ];
+        });
+    
         // Calculate the total price of the cart
         $totalPrice = $panier->produits->sum(function ($produit) {
             return $produit->pivot->quantite * $produit->prix; // Multiply quantity by product price
@@ -110,10 +108,19 @@ $cartData = $panier->produits->map(function ($produit) {
         
         // If the order was saved successfully
         if ($isSaved) {
+            // Loop through each product in the panier and decrease its stock
+            foreach ($panier->produits as $produit) {
+                $quantiteOrdered = $produit->pivot->quantite;  // Get quantity ordered
+                $produit->quantite -= $quantiteOrdered;  // Decrease the stock
+                $produit->save();  // Save the updated product
+                Log::info('Product stock updated:', ['product_id' => $produit->id, 'new_stock' => $produit->stock]);
+            }
+    
             // Delete the associated panier after order creation
             $panier->delete();
             Log::info('Panier deleted:', ['panier_id' => $panier->id]);
     
+            // Redirect to the order show page
             return redirect()->route('commande.show', ['id' => $commande->id])
                 ->with('success', 'Your order has been successfully placed.');
         } else {
@@ -123,6 +130,7 @@ $cartData = $panier->produits->map(function ($produit) {
             ]);
         }
     }
+    
     public function show($id)
     {
         Log::info('Fetching order with id: ' . $id);

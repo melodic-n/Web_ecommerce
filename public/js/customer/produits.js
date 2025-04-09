@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addToCart(product) {
+
     if (!product.id) {
         console.error("Product ID is missing.");
         return;
