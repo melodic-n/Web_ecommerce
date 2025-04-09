@@ -27,8 +27,8 @@
         </nav>
 
         <div class="search-bar">
-            <input type="text" id="searchBar" placeholder="Recherchez un produit..." onkeyup="filterProducts()">
-            <button class="search-icon"><i class="fas fa-search"></i></button>
+        <input type="text" id="searchBar" placeholder="Recherchez un produit..." onkeyup="filterProducts()">
+        <button class="search-icon"><i class="fas fa-search"></i></button>
         </div>
 
         <div class="icons">
@@ -147,6 +147,9 @@
             color: #333;
             margin-top: 10px;
         }
+        .product-item {
+    display: block;  /* Display all products by default */
+}
 
         .product-price {
             font-size: 1.2em;

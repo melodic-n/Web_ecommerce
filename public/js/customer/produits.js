@@ -261,18 +261,19 @@ function closeCart() {
 // function passerCommande() {
 //     window.location.href = orderRoute;
 // }
-
-// Filter products functionality
 function filterProducts() {
     const searchValue = document.getElementById('searchBar').value.trim().toLowerCase();
-    const products = document.querySelectorAll('.rectangle');
-    
+    const products = document.querySelectorAll('.product-item');
+
     products.forEach(product => {
         const productName = product.getAttribute('data-name').toLowerCase();
-        if (productName.includes(searchValue)) {
-            product.style.display = 'block';
+
+        if (productName.includes(searchValue) && searchValue !== '') {
+            product.style.display = 'block';  // Show the product if it matches
+        } else if (searchValue === '') {
+            product.style.display = 'block';  // Show all products when the search bar is empty
         } else {
-            product.style.display = 'none';
+            product.style.display = 'none';  // Hide the product if it doesn't match
         }
     });
 }
