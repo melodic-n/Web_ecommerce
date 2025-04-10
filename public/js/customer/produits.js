@@ -269,11 +269,11 @@ function filterProducts() {
         const productName = product.getAttribute('data-name').toLowerCase();
 
         if (productName.includes(searchValue) && searchValue !== '') {
-            product.style.display = 'block';  // Show the product if it matches
+            product.style.display = 'block'; 
         } else if (searchValue === '') {
-            product.style.display = 'block';  // Show all products when the search bar is empty
+            product.style.display = 'block';  
         } else {
-            product.style.display = 'none';  // Hide the product if it doesn't match
+            product.style.display = 'none'; 
         }
     });
 }
